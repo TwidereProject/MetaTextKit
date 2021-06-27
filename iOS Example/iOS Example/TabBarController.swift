@@ -9,7 +9,7 @@ import UIKit
 
 final class TabBarController: UITabBarController {
  
-    let viewController = ViewController()
+    let viewController = MastodonStatusViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()

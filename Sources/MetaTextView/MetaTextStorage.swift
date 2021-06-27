@@ -6,12 +6,17 @@
 //
 
 import UIKit
+import Meta
+
+public protocol MetaTextStorageDelegate: AnyObject {
+    func processEditing(_ textStorage: MetaTextStorage) -> MetaContent?
+}
 
 final public class MetaTextStorage: NSTextStorage {
     
     var storage = NSTextStorage()
     
-    private var cachedStorageString: Substring?
+    weak var processDelegate: MetaTextStorageDelegate?
     
     // MARK: - NSAttributedString primitives
     
@@ -43,9 +48,7 @@ final public class MetaTextStorage: NSTextStorage {
 
 extension MetaTextStorage {
     public override func processEditing() {
+        _ = processDelegate?.processEditing(self)
         super.processEditing()
-        
-        print(string)
     }
 }
-

@@ -22,11 +22,17 @@ extension Meta {
 extension Meta.Entity {
     public var primaryText: String {
         switch self.meta {
-        case .hashtag(let text, _):        return text
-        case .mention(let text, _):        return text
-        case .email(let text, _):          return text
-        case .emoji(let text, _, _):       return text
         case .url(let text, _, _, _):      return text
-         }
+        case .emoji(let text, _, _, _):       return text
+        case .hashtag(let text, _, _):        return text
+        case .mention(let text, _, _):        return text
+        case .email(let text, _):          return text
+        }
+    }
+}
+
+extension Meta.Entity: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "{\(range.debugDescription), \(primaryText)"
     }
 }
