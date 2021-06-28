@@ -32,7 +32,7 @@ extension MastodonMetaContent {
     struct Regex {
         lazy var emojiRegex = try? NSRegularExpression(pattern: #"(?:([a-zA-Z0-9_]+)(:\B(?=\s)))"#, options: [])
         lazy var hashtagRegex = try? NSRegularExpression(pattern: #"(?:([^\s.]+))"#, options: [])
-        lazy var mentionRegex = try? NSRegularExpression(pattern: #"(?:([a-zA-Z0-9_]+)(@[a-zA-Z0-9_.-]+)?)"#, options: [])
+        lazy var mentionRegex = try? NSRegularExpression(pattern: #"(?:([a-zA-Z0-9_-]+)(@[a-zA-Z0-9_.-]+)?)"#, options: [])
     }
 
     static var regex = Regex()
@@ -111,8 +111,7 @@ extension MastodonMetaContent {
                 {
                     let string = "@\(text)"
                     let meta: Meta = .mention(string, mention: String(text), userInfo: nil)
-                    let textRange = NSRange(location: range.location - 1, length: (string as NSString).length)
-                    let stringRange = NSRange(location: textRange.location - 1, length: textRange.length + 1)
+                    let stringRange = NSRange(location: range.location - 1, length: (string as NSString).length)
                     symbolEntities.append(Meta.Entity(range: stringRange, meta: meta))
                     _ = scanner.scanString(String(text))
                 }
