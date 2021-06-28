@@ -12,7 +12,7 @@ extension Meta {
 
     public static var metaLinkScheme = "meta-link-scheme"
 
-    init?(url: URL) {
+    public init?(url: URL) {
         guard let scheme = url.scheme?.lowercased() else { return nil }
         guard scheme == Meta.metaLinkScheme else {
             self = .url("", trimmed: "", url: url.absoluteString, userInfo: nil)
@@ -35,7 +35,7 @@ extension Meta {
         return nil
     }
 
-    var uri: URL? {
+    public var uri: URL? {
         switch self {
         case .url(_, _, let url, _):
             return URL(string: url)
