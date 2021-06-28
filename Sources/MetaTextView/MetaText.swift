@@ -21,14 +21,22 @@ public class MetaText: NSObject {
 
     static var fontSize: CGFloat = 17
 
+    static var paragraphStyle: NSMutableParagraphStyle = {
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 5
+        return style
+    }()
+
     public var textAttributes: [NSAttributedString.Key: Any] = [
         .font: UIFontMetrics(forTextStyle: .body).scaledFont(for: .systemFont(ofSize: MetaText.fontSize, weight: .regular)),
         .foregroundColor: UIColor.label,
+        .paragraphStyle: MetaText.paragraphStyle,
     ]
 
     public var linkAttributes: [NSAttributedString.Key: Any] = [
         .font: UIFontMetrics(forTextStyle: .body).scaledFont(for: .systemFont(ofSize: MetaText.fontSize, weight: .semibold)),
         .foregroundColor: UIColor.link,
+        .paragraphStyle: MetaText.paragraphStyle,
     ]
     
     public override init() {
