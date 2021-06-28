@@ -17,7 +17,7 @@ public class MetaText: NSObject {
     public weak var delegate: MetaTextDelegate?
     
     public let textStorage: MetaTextStorage
-    public let textView: UITextView
+    public let textView: MetaTextView
 
     static var fontSize: CGFloat = 17
 
@@ -49,7 +49,7 @@ public class MetaText: NSObject {
         let textContainer = NSTextContainer(size: .zero)
         layoutManager.addTextContainer(textContainer)
 
-        textView = UITextView(frame: .zero, textContainer: textContainer)
+        textView = MetaTextView(frame: .zero, textContainer: textContainer)
 
         super.init()
 
@@ -139,7 +139,10 @@ extension MetaText: MetaTextStorageDelegate {
                     return
                 }
                 // length should be 1
-                self.textView.selectedRange = NSRange(location: range.location + range.length, length: 0)
+                let range = NSRange(location: range.location + range.length, length: 0)
+                if range.upperBound < self.textView.attributedText.length {
+                    self.textView.selectedRange = range
+                }
                 canStop.pointee = true
             }
         }
