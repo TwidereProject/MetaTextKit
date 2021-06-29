@@ -17,6 +17,8 @@ public class MetaTextView: UITextView {
 
     public weak var linkDelegate: MetaTextViewDelegate?
 
+    let tapGestureRecognizer = UITapGestureRecognizer()
+
     public override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         _init()
@@ -26,12 +28,18 @@ public class MetaTextView: UITextView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public override var isEditable: Bool {
+        didSet {
+            tapGestureRecognizer.isEnabled = !isEditable
+        }
+    }
+
     private func _init() {
-        let tapGestureRecognizer =  UITapGestureRecognizer()
         addGestureRecognizer(tapGestureRecognizer)
 
         tapGestureRecognizer.addTarget(self, action: #selector(MetaTextView.tapGestureRecognizerHandler(_:)))
         tapGestureRecognizer.delaysTouchesBegan = false
+        tapGestureRecognizer.isEnabled = !isEditable
     }
 
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
