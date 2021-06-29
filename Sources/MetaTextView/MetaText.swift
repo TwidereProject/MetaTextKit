@@ -126,6 +126,7 @@ extension MetaText: MetaTextStorageDelegate {
             attachment.delegate = self
         }
 
+        var newSelectedRange: NSRange?
         if let firstReplacedAttachment = attachments.first {
             // set selection position when attachment replaced
             textStorage.enumerateAttribute(
@@ -140,10 +141,17 @@ extension MetaText: MetaTextStorageDelegate {
                 }
                 // length should be 1
                 let range = NSRange(location: range.location + range.length, length: 0)
-                if range.upperBound < self.textView.attributedText.length {
-                    self.textView.selectedRange = range
+                if range.upperBound < self.textStorage.length {
+                    newSelectedRange = range
                 }
                 canStop.pointee = true
+            }
+        }
+
+        defer {
+            if let newSelectedRange = newSelectedRange,
+               newSelectedRange.upperBound < textView.selectedRange.length {
+                textView.selectedRange = newSelectedRange
             }
         }
 
