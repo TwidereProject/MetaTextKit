@@ -70,7 +70,10 @@ extension MastodonMetaContent {
         }
 
         static func parse(document: String) throws -> MastodonMetaContent.Node {
-            let document = document.replacingOccurrences(of: "<br>|<br />", with: "\r\n", options: .regularExpression, range: nil)
+            let document = document
+                .replacingOccurrences(of: "<br>|<br />", with: "\r\n", options: .regularExpression, range: nil)
+                .replacingOccurrences(of: "</p>", with: "\r\n", options: .regularExpression, range: nil)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
             let html = try HTMLDocument(string: document)
 
             let body = html.body ?? nil
