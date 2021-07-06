@@ -33,9 +33,16 @@ extension MastodonMetaContent {
             case .url:
                 guard let href = node.href else { continue }
                 let text = String(node.text)
+                let trimmed: String = {
+                    if let hrefEllipsis = node.hrefEllipsis {
+                        return hrefEllipsis + "..."
+                    } else {
+                        return text
+                    }
+                }()
                 let entity = Meta.Entity(
                     range: range,
-                    meta: .url(text, trimmed: node.hrefEllipsis ?? text, url: href, userInfo: nil)
+                    meta: .url(text, trimmed: trimmed, url: href, userInfo: nil)
                 )
                 metaEntities.append(entity)
             case .hashtag:
