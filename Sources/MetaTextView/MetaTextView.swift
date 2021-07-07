@@ -43,7 +43,7 @@ public class MetaTextView: UITextView {
     }
 
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        guard !isEditable else {
+        if isEditable || isSelectable {
             return super.point(inside: point, with: event)
         }
 
@@ -68,7 +68,6 @@ public class MetaTextView: UITextView {
         }
     }
 
-
 }
 
 extension MetaTextView {
@@ -77,6 +76,11 @@ extension MetaTextView {
 
         switch sender.state {
         case .ended:
+            // always try cancel selection when tap ended
+            if isSelectable {
+                selectedTextRange = nil
+            }
+
             let point = sender.location(in: self)
             guard let link = link(at: point) else { return }
             linkDelegate?.metaTextView(self, didSelectLink: link)
