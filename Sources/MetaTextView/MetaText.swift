@@ -24,6 +24,7 @@ public class MetaText: NSObject {
     static var paragraphStyle: NSMutableParagraphStyle = {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 5
+        style.paragraphSpacing = 8
         return style
     }()
 
