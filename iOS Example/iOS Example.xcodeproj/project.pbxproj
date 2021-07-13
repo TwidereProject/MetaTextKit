@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB585015269D6312006CB091 /* TwitterStatusViewController.swift */; };
+		DB58501E269D6A5F006CB091 /* TwitterMeta in Frameworks */ = {isa = PBXBuildFile; productRef = DB58501D269D6A5F006CB091 /* TwitterMeta */; };
 		DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB837010266E1730005CE2A1 /* AppDelegate.swift */; };
 		DB837013266E1730005CE2A1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB837012266E1730005CE2A1 /* SceneDelegate.swift */; };
 		DB837018266E1730005CE2A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB837016266E1730005CE2A1 /* Main.storyboard */; };
@@ -16,9 +18,13 @@
 		DB83702B266E1E8F005CE2A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83702A266E1E8F005CE2A1 /* TabBarController.swift */; };
 		DBA4605E268630B0004E094B /* MastodonStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA4605D268630B0004E094B /* MastodonStatusViewController.swift */; };
 		DBA4606026863161004E094B /* MastodonMeta in Frameworks */ = {isa = PBXBuildFile; productRef = DBA4605F26863161004E094B /* MastodonMeta */; };
+		F8B964941D76B076507665B1 /* Pods_iOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAD19EE75CEEA66BEE085A2E /* Pods_iOS_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9CAF45C0D37785EFEF6B09CD /* Pods-iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.release.xcconfig"; path = "Target Support Files/Pods-iOS Example/Pods-iOS Example.release.xcconfig"; sourceTree = "<group>"; };
+		BAD19EE75CEEA66BEE085A2E /* Pods_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB585015269D6312006CB091 /* TwitterStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterStatusViewController.swift; sourceTree = "<group>"; };
 		DB83700D266E1730005CE2A1 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB837010266E1730005CE2A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DB837012266E1730005CE2A1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -29,6 +35,7 @@
 		DB837024266E173D005CE2A1 /* MetaTextView */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetaTextView; path = ..; sourceTree = "<group>"; };
 		DB83702A266E1E8F005CE2A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		DBA4605D268630B0004E094B /* MastodonStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MastodonStatusViewController.swift; sourceTree = "<group>"; };
+		FDEB70A05015EE4012417F18 /* Pods-iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.debug.xcconfig"; path = "Target Support Files/Pods-iOS Example/Pods-iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,13 +44,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBA4606026863161004E094B /* MastodonMeta in Frameworks */,
+				DB58501E269D6A5F006CB091 /* TwitterMeta in Frameworks */,
 				DB837027266E189A005CE2A1 /* MetaTextView in Frameworks */,
+				F8B964941D76B076507665B1 /* Pods_iOS_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6CA08078843A6AB0C850ADFE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FDEB70A05015EE4012417F18 /* Pods-iOS Example.debug.xcconfig */,
+				9CAF45C0D37785EFEF6B09CD /* Pods-iOS Example.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		DB837004266E1730005CE2A1 = {
 			isa = PBXGroup;
 			children = (
@@ -51,6 +69,7 @@
 				DB83700F266E1730005CE2A1 /* iOS Example */,
 				DB83700E266E1730005CE2A1 /* Products */,
 				DB837025266E189A005CE2A1 /* Frameworks */,
+				6CA08078843A6AB0C850ADFE /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,6 +88,7 @@
 				DB837012266E1730005CE2A1 /* SceneDelegate.swift */,
 				DB83702A266E1E8F005CE2A1 /* TabBarController.swift */,
 				DBA4605D268630B0004E094B /* MastodonStatusViewController.swift */,
+				DB585015269D6312006CB091 /* TwitterStatusViewController.swift */,
 				DB837019266E1732005CE2A1 /* Assets.xcassets */,
 				DB837016266E1730005CE2A1 /* Main.storyboard */,
 				DB83701B266E1732005CE2A1 /* LaunchScreen.storyboard */,
@@ -80,6 +100,7 @@
 		DB837025266E189A005CE2A1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BAD19EE75CEEA66BEE085A2E /* Pods_iOS_Example.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -91,9 +112,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DB837021266E1732005CE2A1 /* Build configuration list for PBXNativeTarget "iOS Example" */;
 			buildPhases = (
+				4FAC6AB48F48649429BB1B4A /* [CP] Check Pods Manifest.lock */,
 				DB837009266E1730005CE2A1 /* Sources */,
 				DB83700A266E1730005CE2A1 /* Frameworks */,
 				DB83700B266E1730005CE2A1 /* Resources */,
+				B352E080C3C66E13D7FA1275 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -103,6 +126,7 @@
 			packageProductDependencies = (
 				DB837026266E189A005CE2A1 /* MetaTextView */,
 				DBA4605F26863161004E094B /* MastodonMeta */,
+				DB58501D269D6A5F006CB091 /* TwitterMeta */,
 			);
 			productName = "iOS Example";
 			productReference = DB83700D266E1730005CE2A1 /* iOS Example.app */;
@@ -153,11 +177,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4FAC6AB48F48649429BB1B4A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-iOS Example-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B352E080C3C66E13D7FA1275 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		DB837009266E1730005CE2A1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */,
 				DB83702B266E1E8F005CE2A1 /* TabBarController.swift in Sources */,
 				DBA4605E268630B0004E094B /* MastodonStatusViewController.swift in Sources */,
 				DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */,
@@ -305,6 +372,7 @@
 		};
 		DB837022266E1732005CE2A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FDEB70A05015EE4012417F18 /* Pods-iOS Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -324,6 +392,7 @@
 		};
 		DB837023266E1732005CE2A1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9CAF45C0D37785EFEF6B09CD /* Pods-iOS Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -365,6 +434,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DB58501D269D6A5F006CB091 /* TwitterMeta */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TwitterMeta;
+		};
 		DB837026266E189A005CE2A1 /* MetaTextView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaTextView;

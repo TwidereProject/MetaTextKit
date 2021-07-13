@@ -83,10 +83,7 @@ extension MastodonMetaContent {
             }
         }
 
-        var trimmed = text
-        for entity in metaEntities {
-            trim(content: &trimmed, entity: entity, entities: metaEntities)
-        }
+        let trimmed = Meta.trim(content: text, orderedEntities: metaEntities)
 
         return MastodonMetaContent(
             document: document,
@@ -94,33 +91,6 @@ extension MastodonMetaContent {
             trimmed: trimmed,
             entities: metaEntities
         )
-    }
-
-    static func trim(content: inout String, entity: Meta.Entity, entities: [Meta.Entity]) {
-        let text: String
-        let trimmed: String
-        switch entity.meta {
-        case .url(let _text, let _trimmed, _, _):
-            text = _text
-            trimmed = _trimmed
-        case .emoji(let _text, _, _, _):
-            text = _text
-            trimmed = " "
-        default:
-            return
-        }
-
-        guard let index = entities.firstIndex(where: { $0.range == entity.range }) else { return }
-        guard let range = Range(entity.range, in: content) else { return }
-        content.replaceSubrange(range, with: trimmed)
-
-        let offset = trimmed.count - text.count
-        entity.range.length += offset
-
-        let moveEntities = Array(entities[index...].dropFirst())
-        for moveEntity in moveEntities {
-            moveEntity.range.location += offset
-        }
     }
 
 }

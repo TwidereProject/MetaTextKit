@@ -9,13 +9,15 @@ import UIKit
 
 final class TabBarController: UITabBarController {
  
-    let viewController = MastodonStatusViewController()
+    let mastodonStatusViewController = MastodonStatusViewController()
+    let twitterStatusViewController = TwitterStatusViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let viewControllers: [UIViewController] = [
-            UINavigationController(rootViewController: viewController),
+            UINavigationController(rootViewController: mastodonStatusViewController),
+            UINavigationController(rootViewController: twitterStatusViewController)
         ]
         setViewControllers(viewControllers, animated: false)
     }

@@ -14,6 +14,9 @@ let package = Package(
         .library(
             name: "MastodonMeta",
             targets: ["MastodonMeta"]),
+        .library(
+            name: "TwitterMeta",
+            targets: ["TwitterMeta"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -29,6 +32,9 @@ let package = Package(
         .target(
             name: "MastodonMeta",
             dependencies: ["Meta", "Fuzi", "Nuke"]),
+        .target(
+            name: "TwitterMeta",
+            dependencies: ["Meta"]),
         .target(
             name: "Meta"),
         .testTarget(
