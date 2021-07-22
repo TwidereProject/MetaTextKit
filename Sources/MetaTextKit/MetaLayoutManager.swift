@@ -12,7 +12,8 @@ public class MetaLayoutManager: NSLayoutManager {
 
     static let displayAttachmentContentViewTag = 13626
 
-    weak var textView: UITextView?
+    /// Label or TextView
+    weak var hostView: UIView?
 
     public override func drawGlyphs(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
         super.drawGlyphs(forGlyphRange: glyphsToShow, at: origin)
@@ -36,14 +37,14 @@ public class MetaLayoutManager: NSLayoutManager {
 
             if attachment.content.superview == nil {
                 attachment.content.tag = MetaLayoutManager.displayAttachmentContentViewTag
-                textView?.addSubview(attachment.content)
+                hostView?.addSubview(attachment.content)
             }
 
             displayingAttachmentContentViews.append(attachment.content)
         }
 
         // remove attachment content when attachment deleted
-        for view in textView?.subviews ?? [] where view.tag == MetaLayoutManager.displayAttachmentContentViewTag {
+        for view in hostView?.subviews ?? [] where view.tag == MetaLayoutManager.displayAttachmentContentViewTag {
             guard displayingAttachmentContentViews.contains(view) else {
                 view.removeFromSuperview()
                 continue

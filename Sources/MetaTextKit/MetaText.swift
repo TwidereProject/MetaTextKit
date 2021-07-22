@@ -53,7 +53,7 @@ public class MetaText: NSObject {
         layoutManager.addTextContainer(textContainer)
 
         textView = MetaTextView(frame: .zero, textContainer: textContainer)
-        layoutManager.textView = textView
+        layoutManager.hostView = textView
 
         super.init()
 
@@ -95,7 +95,11 @@ extension MetaText {
 
         textView.linkTextAttributes = linkAttributes
         textView.attributedText = attributedString
+    }
 
+    public func reset() {
+        let attributedString = NSAttributedString(string: "")
+        textView.attributedText = attributedString
     }
 
 }
