@@ -9,7 +9,6 @@ import os.log
 import UIKit
 import Combine
 import UniformTypeIdentifiers
-import Nuke
 import Meta
 
 public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
