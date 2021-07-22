@@ -13,6 +13,8 @@ import Meta
 
 public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
 
+    public var disposeBag = Set<AnyCancellable>()
+
     static let placeholderImage: UIImage = {
         let size = CGSize(width: 1, height: 1)
         return UIGraphicsImageRenderer(size: size).image { context in

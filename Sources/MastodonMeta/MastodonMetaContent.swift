@@ -7,8 +7,8 @@
 
 import Foundation
 import Meta
-import APNGKit
 import Alamofire
+import SDWebImage
 
 /// Generic Mastodon status content
 ///
@@ -33,18 +33,15 @@ extension MastodonMetaContent: MetaContent {
 
     public func metaAttachment(for entity: Meta.Entity) -> MetaAttachment? {
         guard case let .emoji(text, _, url, _) = entity.meta else { return nil }
-        let imageView = APNGImageView()
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                let image = APNGImage(data: data)
-                imageView.image = image
-                imageView.startAnimating()
-            case .failure:
-                break
-            }
+
+        let imageView = SDAnimatedImageView()
+        let attachment = MastodonMetaAttachment(string: text, url: url, content: imageView)
+
+        if let url = URL(string: url) {
+            imageView.sd_setImage(with: url)
         }
-        return MastodonMetaAttachment(string: text, url: url, content: imageView)
+
+        return attachment
     }
 }
 

@@ -22,7 +22,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/cezheng/Fuzi.git", from: "3.1.3"),
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.4.3"),
-        .package(url: "https://github.com/onevcat/APNGKit.git", from: "1.2.2"),
+        .package(url: "https://github.com/SDWebImage/SDWebImage.git", from: "5.11.1")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -32,7 +32,7 @@ let package = Package(
             dependencies: ["Meta"]),
         .target(
             name: "MastodonMeta",
-            dependencies: ["Meta", "Fuzi", "Alamofire", "APNGKit"]),
+            dependencies: ["Meta", "Fuzi", "Alamofire", "SDWebImage"]),
         .target(
             name: "TwitterMeta",
             dependencies: ["Meta"]),
