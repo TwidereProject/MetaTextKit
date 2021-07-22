@@ -13,6 +13,13 @@ import MastodonMeta
 
 class MastodonStatusViewController: UIViewController {
 
+    let singleLineMetaText: MetaText = {
+        let metaText = MetaText()
+        metaText.textView.textContainer.maximumNumberOfLines = 1
+        metaText.textView.isEditable = false
+        metaText.textView.isScrollEnabled = false
+        return metaText
+    }()
     let metaText = MetaText()
 
     var attachments: [NSTextAttachment] = []
@@ -29,7 +36,7 @@ class MastodonStatusViewController: UIViewController {
                 title: "", image: nil, identifier: nil, options: [], children: [
                     UIAction(title: "Reload Content", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: [], state: .off, handler: { [weak self] _ in
                         guard let self = self else { return }
-                        self.setupContent()
+                        self.setupTextEditorContent()
                     }),
                     UIAction(title: "Load Emojis", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: [], state: .off, handler: { [weak self] _ in
                         guard let self = self else { return }
@@ -57,10 +64,18 @@ class MastodonStatusViewController: UIViewController {
             )
         )
 
+        singleLineMetaText.textView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(singleLineMetaText.textView)
+        NSLayoutConstraint.activate([
+            singleLineMetaText.textView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            singleLineMetaText.textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            singleLineMetaText.textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
         metaText.textView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(metaText.textView)
         NSLayoutConstraint.activate([
-            metaText.textView.topAnchor.constraint(equalTo: view.topAnchor),
+            metaText.textView.topAnchor.constraint(equalTo: singleLineMetaText.textView.bottomAnchor),
             metaText.textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             metaText.textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             metaText.textView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -68,21 +83,33 @@ class MastodonStatusViewController: UIViewController {
 
         metaText.delegate = self
 
-        setupContent()
+        setupLabelContent()
+        setupTextEditorContent()
     }
 
 }
 
 extension MastodonStatusViewController {
 
-    func setupContent() {
+    func setupLabelContent() {
+        let content = (0..<100)
+            .compactMap { _ in ":" + emojis.keys.randomElement()! + ":" }
+            .joined(separator: " ")
+
+        do {
+            let metaContent = try MastodonMetaContent.convert(
+                document: MastodonContent(content: content, emojis: emojis)
+            )
+            singleLineMetaText.configure(content: metaContent)
+        } catch {
+            assertionFailure()
+        }
+    }
+
+    func setupTextEditorContent() {
         let statusContent = """
-        <p>Mastodon:<br><span class="h-card"><a class="u-url mention" href="https://example.com/users/@username" rel="nofollow noopener noreferrer" target="_blank">@<span>username</span></a></span> Hello 你好 こんにちは 😂😂:awesome: <a href="https://mstdn.jp/tags/hashtag" class="mention hashtag" rel="tag">#<span>hashtag</span></a> <a href="https://example.com/welcome/2021/02/01" rel="nofollow noopener noreferrer" target="_blank">https://example.com/welcome/<span class="invisible">2021/02/01</span></a></p><p>Next paragraph Hello 你好 こんにちは 😂😂:awesome:</p><p>Next paragraph Hello 你好 こんにちは 😂😂:awesome:</p>
+        <p>Mastodon:<br><span class="h-card"><a class="u-url mention" href="https://example.com/users/@username" rel="nofollow noopener noreferrer" target="_blank">@<span>username</span></a></span> Hello 你好 こんにちは 😂:awesome: :ablobattention: :ablobcaramelldansen: :ablobattentionreverse:<a href="https://mstdn.jp/tags/hashtag" class="mention hashtag" rel="tag">#<span>hashtag</span></a> <a href="https://example.com/welcome/2021/02/01" rel="nofollow noopener noreferrer" target="_blank">https://example.com/welcome/<span class="invisible">2021/02/01</span></a></p><p>Next paragraph Hello 你好 こんにちは 😂:awesome: :ablobattention: :ablobcaramelldansen: :ablobattentionreverse:</p><p>Next paragraph Hello 你好 こんにちは 😂:awesome: :ablobattention: :ablobcaramelldansen: :ablobattentionreverse:</p>
         """
-        let emojis: [String: String] = [
-            "apple_inc": "https://media.mstdn.jp/custom_emojis/images/000/002/171/original/b848520ba07a354c.png",
-            "awesome": "https://media.mstdn.jp/custom_emojis/images/000/002/757/original/3e0e01274120ad23.png"
-        ]
 
         do {
             let metaContent = try MastodonMetaContent.convert(
@@ -138,7 +165,11 @@ extension MastodonStatusViewController {
     var emojis: [String: String] {
         [
             "apple_inc": "https://media.mstdn.jp/custom_emojis/images/000/002/171/original/b848520ba07a354c.png",
-            "awesome": "https://media.mstdn.jp/custom_emojis/images/000/002/757/original/3e0e01274120ad23.png"
+            "awesome": "https://media.mstdn.jp/custom_emojis/images/000/002/757/original/3e0e01274120ad23.png",
+            "ablobattention": "https://media.mstdn.jp/custom_emojis/images/000/123/539/original/f3b1abf131a34b6c.png",
+            "ablobcaramelldansen": "https://media.mstdn.jp/custom_emojis/images/000/120/885/original/75cb4f59948b69ce.png",
+            "ablobattentionreverse": "https://media.mstdn.jp/custom_emojis/images/000/120/907/original/d0320f5180028c28.png",
         ]
     }
+
 }

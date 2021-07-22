@@ -1,12 +1,11 @@
 //
-//  File.swift
+//  Meta+Link.swift
 //  
 //
 //  Created by Cirno MainasuK on 2021-6-26.
 //
 
 import Foundation
-import Meta
 
 extension Meta {
 

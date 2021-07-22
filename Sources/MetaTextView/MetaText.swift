@@ -15,7 +15,8 @@ public protocol MetaTextDelegate: AnyObject {
 public class MetaText: NSObject {
 
     public weak var delegate: MetaTextDelegate?
-    
+
+    public let layoutManager: MetaLayoutManager
     public let textStorage: MetaTextStorage
     public let textView: MetaTextView
 
@@ -44,13 +45,15 @@ public class MetaText: NSObject {
         let textStorage = MetaTextStorage()
         self.textStorage = textStorage
 
-        let layoutManager = NSLayoutManager()
+        let layoutManager = MetaLayoutManager()
+        self.layoutManager = layoutManager
         textStorage.addLayoutManager(layoutManager)
 
         let textContainer = NSTextContainer(size: .zero)
         layoutManager.addTextContainer(textContainer)
 
         textView = MetaTextView(frame: .zero, textContainer: textContainer)
+        layoutManager.textView = textView
 
         super.init()
 
@@ -83,7 +86,7 @@ extension MetaText {
     public func configure(content: MetaContent) {
         let attributedString = NSMutableAttributedString(string: content.string)
 
-        let attachments = MetaText.setAttributes(
+        MetaText.setAttributes(
             for: attributedString,
             textAttributes: textAttributes,
             linkAttributes: linkAttributes,
@@ -93,19 +96,8 @@ extension MetaText {
         textView.linkTextAttributes = linkAttributes
         textView.attributedText = attributedString
 
-        for attachment in attachments {
-            attachment.delegate = self
-        }
     }
 
-}
-
-// MARK: - MetaAttachmentDelegate
-extension MetaText: MetaAttachmentDelegate {
-    public func metaAttachment(_ metaAttachment: MetaAttachment, imageUpdated image: UIImage) {
-        // not locate range for attachment to profile batch of emoji loading performance (> 100)
-        textView.setNeedsDisplay()
-    }
 }
 
 // MARK: - MetaTextStorageDelegate
@@ -115,7 +107,7 @@ extension MetaText: MetaTextStorageDelegate {
 
         // configure meta
         textStorage.beginEditing()
-        let attachments = MetaText.setAttributes(
+        MetaText.setAttributes(
             for: textStorage,
             textAttributes: textAttributes,
             linkAttributes: linkAttributes,
@@ -123,21 +115,20 @@ extension MetaText: MetaTextStorageDelegate {
         )
         textStorage.endEditing()
 
-        for attachment in attachments {
-            attachment.delegate = self
-        }
-
         return content
     }
 }
 
 extension MetaText {
+
+    @discardableResult
     public static func setAttributes(
         for attributedString: NSMutableAttributedString,
         textAttributes: [NSAttributedString.Key: Any],
         linkAttributes: [NSAttributedString.Key: Any],
         content: MetaContent
     ) -> [MetaAttachment] {
+
         // clean up
         let allRange = NSRange(location: 0, length: attributedString.length)
         for key in textAttributes.keys {
@@ -170,7 +161,7 @@ extension MetaText {
             let font = attributedString.attribute(.font, at: entity.range.location, effectiveRange: nil) as? UIFont
             let fontSize = font?.pointSize ?? MetaText.fontSize
             attachment.bounds = CGRect(
-                origin: CGPoint(x: 0, y: -floor(fontSize / 6)),  // magic
+                origin: CGPoint(x: 0, y: -floor(fontSize / 5)),  // magic descender
                 size: CGSize(width: fontSize, height: fontSize)
             )
 
@@ -179,9 +170,5 @@ extension MetaText {
 
         return replacedAttachments
     }
-}
 
-
-extension NSAttributedString.Key {
-    public static let metaEmojiText = NSAttributedString.Key(rawValue: "MetaEmojiTextKey")
 }
