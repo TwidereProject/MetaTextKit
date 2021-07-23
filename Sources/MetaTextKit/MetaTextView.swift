@@ -8,9 +8,10 @@
 import os.log
 import UIKit
 import Combine
+import Meta
 
 public protocol MetaTextViewDelegate: AnyObject {
-    func metaTextView(_ metaTextView: MetaTextView, didSelectLink link: URL)
+    func metaTextView(_ metaTextView: MetaTextView, didSelectMeta meta: Meta)
 }
 
 public class MetaTextView: UITextView {
@@ -47,10 +48,10 @@ public class MetaTextView: UITextView {
             return super.point(inside: point, with: event)
         }
 
-        return link(at: point) != nil
+        return meta(at: point) != nil
     }
 
-    func link(at point: CGPoint) -> URL? {
+    func meta(at point: CGPoint) -> Meta? {
         guard let _ = linkDelegate else {
             return nil
         }
@@ -60,9 +61,9 @@ public class MetaTextView: UITextView {
 
         if let characterIndex = index,
            characterIndex < textStorage.length,
-           let link = textStorage.attribute(.link, at: characterIndex, effectiveRange: nil) as? URL
+           let meta = textStorage.attribute(.meta, at: characterIndex, effectiveRange: nil) as? Meta
         {
-            return link
+            return meta
         } else {
             return nil
         }
@@ -82,8 +83,8 @@ extension MetaTextView {
             }
 
             let point = sender.location(in: self)
-            guard let link = link(at: point) else { return }
-            linkDelegate?.metaTextView(self, didSelectLink: link)
+            guard let meta = meta(at: point) else { return }
+            linkDelegate?.metaTextView(self, didSelectMeta: meta)
         default:
             break
         }

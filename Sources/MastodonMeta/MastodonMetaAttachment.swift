@@ -9,6 +9,7 @@ import os.log
 import UIKit
 import Combine
 import UniformTypeIdentifiers
+import SDWebImage
 import Meta
 
 public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
@@ -31,6 +32,10 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
     public let content: UIView
     public var contentFrame: CGRect = .zero
 
+    var imageView: SDAnimatedImageView? {
+        return content as? SDAnimatedImageView
+    }
+
     public init(string: String, url: String, content: UIView) {
         self.string = string
         self.url = url
@@ -42,6 +47,22 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
 
     public override func image(forBounds imageBounds: CGRect, textContainer: NSTextContainer?, characterIndex charIndex: Int) -> UIImage? {
         contentFrame = imageBounds
+
+        imageView?.contentMode = .scaleAspectFit
+        imageView?.sd_setImage(with: URL(string: url)) { [weak self] image, error, cacheType, url in
+            guard let self = self else { return }
+            guard let image = image else { return }
+            guard let totalFrameCount = self.imageView?.player?.totalFrameCount, totalFrameCount > 1
+            else {
+                // resize transformer not works for APNG
+                // force resize for single frame animated image
+                let scale: CGFloat = 3
+                let size = CGSize(width: ceil(imageBounds.size.width * scale), height: ceil(imageBounds.size.height * scale))
+                self.imageView?.image = image.sd_resizedImage(with: size, scaleMode: .aspectFit)
+                return
+            }
+        }
+        
         return super.image(forBounds: imageBounds, textContainer: textContainer, characterIndex: charIndex)
     }
 

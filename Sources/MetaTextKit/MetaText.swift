@@ -7,7 +7,7 @@
 
 import UIKit
 import Meta
-
+import AVFoundation
 public protocol MetaTextDelegate: AnyObject {
     func metaText(_ metaText: MetaText, processEditing textStorage: MetaTextStorage) -> MetaContent?
 }
@@ -22,7 +22,7 @@ public class MetaText: NSObject {
 
     static var fontSize: CGFloat = 17
 
-    static var paragraphStyle: NSMutableParagraphStyle = {
+    public var paragraphStyle: NSMutableParagraphStyle = {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 5
         style.paragraphSpacing = 8
@@ -32,13 +32,11 @@ public class MetaText: NSObject {
     public var textAttributes: [NSAttributedString.Key: Any] = [
         .font: UIFontMetrics(forTextStyle: .body).scaledFont(for: .systemFont(ofSize: MetaText.fontSize, weight: .regular)),
         .foregroundColor: UIColor.label,
-        .paragraphStyle: MetaText.paragraphStyle,
     ]
 
     public var linkAttributes: [NSAttributedString.Key: Any] = [
         .font: UIFontMetrics(forTextStyle: .body).scaledFont(for: .systemFont(ofSize: MetaText.fontSize, weight: .semibold)),
         .foregroundColor: UIColor.link,
-        .paragraphStyle: MetaText.paragraphStyle,
     ]
     
     public override init() {
@@ -90,6 +88,7 @@ extension MetaText {
             for: attributedString,
             textAttributes: textAttributes,
             linkAttributes: linkAttributes,
+            paragraphStyle: paragraphStyle,
             content: content
         )
 
@@ -107,6 +106,14 @@ extension MetaText {
 // MARK: - MetaTextStorageDelegate
 extension MetaText: MetaTextStorageDelegate {
     open func processEditing(_ textStorage: MetaTextStorage) -> MetaContent? {
+        // note: check the attachment content view needs remove or not
+        // "Select All" then delete text not call the `drawGlyphs` methold
+        if textStorage.length == 0 {
+            for view in textView.subviews where view.tag == MetaLayoutManager.displayAttachmentContentViewTag {
+                view.removeFromSuperview()
+            }
+        }
+
         guard let content = delegate?.metaText(self, processEditing: textStorage) else { return nil }
 
         // configure meta
@@ -115,6 +122,7 @@ extension MetaText: MetaTextStorageDelegate {
             for: textStorage,
             textAttributes: textAttributes,
             linkAttributes: linkAttributes,
+            paragraphStyle: paragraphStyle,
             content: content
         )
         textStorage.endEditing()
@@ -130,6 +138,7 @@ extension MetaText {
         for attributedString: NSMutableAttributedString,
         textAttributes: [NSAttributedString.Key: Any],
         linkAttributes: [NSAttributedString.Key: Any],
+        paragraphStyle: NSMutableParagraphStyle,
         content: MetaContent
     ) -> [MetaAttachment] {
 
@@ -141,22 +150,26 @@ extension MetaText {
         for key in linkAttributes.keys {
             attributedString.removeAttribute(key, range: allRange)
         }
-        attributedString.removeAttribute(.link, range: allRange)
+        attributedString.removeAttribute(.meta, range: allRange)
+        attributedString.removeAttribute(.paragraphStyle, range: allRange)
 
-        // setup
+        // text
         attributedString.addAttributes(
             textAttributes,
             range: NSRange(location: 0, length: attributedString.length)
         )
-        
+
+        // meta
         for entity in content.entities {
-            if let uri = entity.meta.uri {
-                var linkAttributes = linkAttributes
-                linkAttributes[.link] = uri
-                attributedString.addAttributes(linkAttributes, range: entity.range)
-            }
+            var linkAttributes = linkAttributes
+            linkAttributes[.meta] = entity.meta
+            attributedString.addAttributes(linkAttributes, range: entity.range)
         }
 
+        // paragraph
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
+
+        // attachment
         var replacedAttachments: [MetaAttachment] = []
         for entity in content.entities.reversed() {
             guard let attachment = content.metaAttachment(for: entity) else { continue }

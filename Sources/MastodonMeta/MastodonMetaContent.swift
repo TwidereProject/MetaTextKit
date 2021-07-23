@@ -36,11 +36,6 @@ extension MastodonMetaContent: MetaContent {
 
         let imageView = SDAnimatedImageView()
         let attachment = MastodonMetaAttachment(string: text, url: url, content: imageView)
-
-        if let url = URL(string: url) {
-            imageView.sd_setImage(with: url)
-        }
-
         return attachment
     }
 }
