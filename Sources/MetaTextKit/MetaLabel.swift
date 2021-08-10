@@ -103,7 +103,9 @@ extension MetaLabel {
 
     public override func drawText(in rect: CGRect) {
         let range = NSRange(location: 0, length: textStorage.length)
-
+        
+        textContainer.size = rect.size
+        
         let origin: CGPoint = .zero
         layoutManager.drawBackground(forGlyphRange: range, at: origin)
         layoutManager.drawGlyphs(forGlyphRange: range, at: origin)
