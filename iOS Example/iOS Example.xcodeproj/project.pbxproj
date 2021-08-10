@@ -9,12 +9,13 @@
 /* Begin PBXBuildFile section */
 		DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB585015269D6312006CB091 /* TwitterStatusViewController.swift */; };
 		DB58501E269D6A5F006CB091 /* TwitterMeta in Frameworks */ = {isa = PBXBuildFile; productRef = DB58501D269D6A5F006CB091 /* TwitterMeta */; };
+		DB71CF1526B3D9B10018F605 /* MetaTextKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB71CF1426B3D9B10018F605 /* MetaTextKit */; };
+		DB71CF1726B3DD9A0018F605 /* TextAreaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB71CF1626B3DD9A0018F605 /* TextAreaViewController.swift */; };
 		DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB837010266E1730005CE2A1 /* AppDelegate.swift */; };
 		DB837013266E1730005CE2A1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB837012266E1730005CE2A1 /* SceneDelegate.swift */; };
 		DB837018266E1730005CE2A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB837016266E1730005CE2A1 /* Main.storyboard */; };
 		DB83701A266E1732005CE2A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB837019266E1732005CE2A1 /* Assets.xcassets */; };
 		DB83701D266E1732005CE2A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB83701B266E1732005CE2A1 /* LaunchScreen.storyboard */; };
-		DB837027266E189A005CE2A1 /* MetaTextView in Frameworks */ = {isa = PBXBuildFile; productRef = DB837026266E189A005CE2A1 /* MetaTextView */; };
 		DB83702B266E1E8F005CE2A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83702A266E1E8F005CE2A1 /* TabBarController.swift */; };
 		DBA4605E268630B0004E094B /* MastodonStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA4605D268630B0004E094B /* MastodonStatusViewController.swift */; };
 		DBA4606026863161004E094B /* MastodonMeta in Frameworks */ = {isa = PBXBuildFile; productRef = DBA4605F26863161004E094B /* MastodonMeta */; };
@@ -25,6 +26,7 @@
 		9CAF45C0D37785EFEF6B09CD /* Pods-iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.release.xcconfig"; path = "Target Support Files/Pods-iOS Example/Pods-iOS Example.release.xcconfig"; sourceTree = "<group>"; };
 		BAD19EE75CEEA66BEE085A2E /* Pods_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB585015269D6312006CB091 /* TwitterStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterStatusViewController.swift; sourceTree = "<group>"; };
+		DB71CF1626B3DD9A0018F605 /* TextAreaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaViewController.swift; sourceTree = "<group>"; };
 		DB83700D266E1730005CE2A1 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB837010266E1730005CE2A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DB837012266E1730005CE2A1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,8 +47,8 @@
 			files = (
 				DBA4606026863161004E094B /* MastodonMeta in Frameworks */,
 				DB58501E269D6A5F006CB091 /* TwitterMeta in Frameworks */,
-				DB837027266E189A005CE2A1 /* MetaTextView in Frameworks */,
 				F8B964941D76B076507665B1 /* Pods_iOS_Example.framework in Frameworks */,
+				DB71CF1526B3D9B10018F605 /* MetaTextKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +91,7 @@
 				DB83702A266E1E8F005CE2A1 /* TabBarController.swift */,
 				DBA4605D268630B0004E094B /* MastodonStatusViewController.swift */,
 				DB585015269D6312006CB091 /* TwitterStatusViewController.swift */,
+				DB71CF1626B3DD9A0018F605 /* TextAreaViewController.swift */,
 				DB837019266E1732005CE2A1 /* Assets.xcassets */,
 				DB837016266E1730005CE2A1 /* Main.storyboard */,
 				DB83701B266E1732005CE2A1 /* LaunchScreen.storyboard */,
@@ -124,9 +127,9 @@
 			);
 			name = "iOS Example";
 			packageProductDependencies = (
-				DB837026266E189A005CE2A1 /* MetaTextView */,
 				DBA4605F26863161004E094B /* MastodonMeta */,
 				DB58501D269D6A5F006CB091 /* TwitterMeta */,
+				DB71CF1426B3D9B10018F605 /* MetaTextKit */,
 			);
 			productName = "iOS Example";
 			productReference = DB83700D266E1730005CE2A1 /* iOS Example.app */;
@@ -140,6 +143,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1250;
+				ORGANIZATIONNAME = MetaTextKit;
 				TargetAttributes = {
 					DB83700C266E1730005CE2A1 = {
 						CreatedOnToolsVersion = 12.5;
@@ -226,6 +230,7 @@
 			files = (
 				DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */,
 				DB83702B266E1E8F005CE2A1 /* TabBarController.swift in Sources */,
+				DB71CF1726B3DD9A0018F605 /* TextAreaViewController.swift in Sources */,
 				DBA4605E268630B0004E094B /* MastodonStatusViewController.swift in Sources */,
 				DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */,
 				DB837013266E1730005CE2A1 /* SceneDelegate.swift in Sources */,
@@ -305,7 +310,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -360,7 +365,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -438,9 +443,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = TwitterMeta;
 		};
-		DB837026266E189A005CE2A1 /* MetaTextView */ = {
+		DB71CF1426B3D9B10018F605 /* MetaTextKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MetaTextView;
+			productName = MetaTextKit;
 		};
 		DBA4605F26863161004E094B /* MastodonMeta */ = {
 			isa = XCSwiftPackageProductDependency;

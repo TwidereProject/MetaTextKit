@@ -8,7 +8,7 @@
 import os.log
 import UIKit
 import Meta
-import MetaTextView
+import MetaTextKit
 import TwitterMeta
 import twitter_text
 
@@ -19,13 +19,17 @@ class TwitterStatusViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Twitter Status"
+        navigationItem.title = "Twitter Status"
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: nil,
             image: UIImage(systemName: "ellipsis.circle"),
             primaryAction: nil,
             menu: UIMenu(
                 title: "", image: nil, identifier: nil, options: [], children: [
+                    UIAction(title: "End Editing", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: [], state: .off, handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        self.view.endEditing(true)
+                    }),
                     UIAction(title: "Reload Content", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: [], state: .off, handler: { [weak self] _ in
                         guard let self = self else { return }
                         self.setupContent()
