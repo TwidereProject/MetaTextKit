@@ -12,6 +12,9 @@ let package = Package(
             name: "MetaTextKit",
             targets: ["MetaTextKit"]),
         .library(
+            name: "MetaTextArea",
+            targets: ["MetaTextArea"]),
+        .library(
             name: "MastodonMeta",
             targets: ["MastodonMeta"]),
         .library(
@@ -29,6 +32,9 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "MetaTextKit",
+            dependencies: ["Meta"]),
+        .target(
+            name: "MetaTextArea",
             dependencies: ["Meta"]),
         .target(
             name: "MastodonMeta",
