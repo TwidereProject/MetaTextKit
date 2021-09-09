@@ -61,7 +61,6 @@ class MetaTextLayoutFragmentLayer: CALayer {
                 guard let attachment = attachment as? MetaAttachment else { return }
                 let startLocation = textLineFragment.characterRange.location
                 let attachmentFrameMinLocation = textLineFragment.locationForCharacter(at: startLocation + range.lowerBound)
-                let attachmentFrameMaxLocation = textLineFragment.locationForCharacter(at: startLocation + range.upperBound)
                 let rect = CGRect(
                     x: attachmentFrameMinLocation.x,
                     y: textLineFragmentTypographicBounds.minY + self.frame.minY,

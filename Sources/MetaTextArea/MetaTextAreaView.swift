@@ -45,14 +45,6 @@ public class MetaTextAreaView: UIView {
     private let contentLayer = MetaTextAreaLayer()
     private let fragmentLayerMap = NSMapTable<NSTextLayoutFragment, CALayer>.weakToWeakObjects()
     
-    // private let underlyingQueue = DispatchQueue(label: "MetaTextAreaView.underlyingQueue", qos: .userInteractive)
-    // private lazy var layoutQueue: OperationQueue = {
-    //     let queue = OperationQueue()
-    //     queue.name = "MetaTextAreaView.layoutQueue"
-    //     queue.underlyingQueue = underlyingQueue
-    //     return queue
-    // }()
-    
     #if DEBUG
     public static var showLayerFrames: Bool = false
     #endif
@@ -192,12 +184,10 @@ extension MetaTextAreaView: NSTextViewportLayoutControllerDelegate {
         contentLayer.addSublayer(textLayoutFragmentLayer)
 
         if !isCreate {
-            let oldBounds = textLayoutFragmentLayer.bounds
             textLayoutFragmentLayer.updateGeometry()
-            if oldBounds != textLayoutFragmentLayer.bounds {
-                textLayoutFragmentLayer.setNeedsDisplay()
-            }
         }
+        // always redraw when layout to meet preferred content size and Dark/Light Mode changing
+        textLayoutFragmentLayer.setNeedsDisplay()
         
         #if DEBUG
         if textLayoutFragmentLayer.showLayerFrames != MetaTextAreaView.showLayerFrames {
@@ -205,29 +195,6 @@ extension MetaTextAreaView: NSTextViewportLayoutControllerDelegate {
             textLayoutFragmentLayer.setNeedsDisplay()
         }
         #endif
-        
-        
-//        for textLineFragment in textLayoutFragment.textLineFragments {
-//            let range = NSRange(location: 0, length: textLineFragment.attributedString.length)
-//            let textLineFragmentTypographicBounds = textLineFragment.typographicBounds
-//            textLineFragment.attributedString.enumerateAttribute(.attachment, in: range, options: [.reverse]) { attachment, range, _ in
-//                guard let attachment = attachment as? MetaAttachment else { return }
-//
-//                let attachmentFrameMinLocation = textLineFragment.locationForCharacter(at: range.lowerBound)
-//                let attachmentFrameMaxLocation = textLineFragment.locationForCharacter(at: range.upperBound)
-//                let rect = CGRect(
-//                    x: attachmentFrameMinLocation.x,
-//                    y: textLineFragmentTypographicBounds.minY + textLayoutFragmentLayer.frame.minY,
-//                    width: attachmentFrameMaxLocation.x - attachmentFrameMinLocation.x,
-//                    height: textLineFragmentTypographicBounds.height
-//                )
-//
-//                attachment.content.frame = rect
-//                if attachment.content.superview == nil {
-//                    self.addSubview(attachment.content)
-//                }
-//            }
-//        }
     }
     
     public func textViewportLayoutControllerDidLayout(_ textViewportLayoutController: NSTextViewportLayoutController) {
