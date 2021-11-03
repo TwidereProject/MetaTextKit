@@ -49,7 +49,12 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         contentFrame = imageBounds
 
         imageView?.contentMode = .scaleAspectFit
-        imageView?.sd_setImage(with: URL(string: url)) { [weak self] image, error, cacheType, url in
+        imageView?.sd_setImage(
+            with: URL(string: url),
+            placeholderImage: nil,
+            options: .preloadAllFrames,
+            progress: nil
+        ) { [weak self] image, error, cacheType, url in
             guard let self = self else { return }
             guard let image = image else { return }
             guard let totalFrameCount = self.imageView?.player?.totalFrameCount, totalFrameCount > 1
