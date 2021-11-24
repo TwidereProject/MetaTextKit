@@ -8,7 +8,27 @@
 import Foundation
 
 public protocol TwitterTextProvider {
+    func parse(text: String) -> ParseResult
     func entities(in text: String) -> [TwitterTextProviderEntity]
+}
+
+public struct ParseResult {
+    public let isValid: Bool
+    public let weightedLength: Int
+    public let maxWeightedLength: Int
+    public let entities: [TwitterTextProviderEntity]
+    
+    public init(
+        isValid: Bool,
+        weightedLength: Int,
+        maxWeightedLength: Int,
+        entities: [TwitterTextProviderEntity]
+    ) {
+        self.isValid = isValid
+        self.entities = entities
+        self.weightedLength = weightedLength
+        self.maxWeightedLength = maxWeightedLength
+    }
 }
 
 public enum TwitterTextProviderEntity {
@@ -20,7 +40,7 @@ public enum TwitterTextProviderEntity {
     case tweetChar(range: NSRange)
     case tweetEmojiChar(range: NSRange)
 
-    var range: NSRange {
+    public var range: NSRange {
         switch self {
         case .url(let range),
             .screenName(let range),
