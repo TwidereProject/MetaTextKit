@@ -8,5 +8,5 @@
 import Foundation
 
 extension NSAttributedString.Key {
-    static let meta = NSAttributedString.Key("MetaAttributeKey.meta")
+    public static let meta = NSAttributedString.Key("MetaAttributeKey.meta")
 }

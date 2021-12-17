@@ -8,15 +8,18 @@
 import os.log
 import UIKit
 import Combine
+import Meta
 
 public protocol MetaTextAreaViewDelegate: AnyObject {
-    func metaTextAreaView(_ view: MetaTextAreaView, intrinsicContentSizeDidUpdate size: CGSize)
+    func metaTextAreaView(_ metaTextAreaView: MetaTextAreaView, didSelectMeta meta: Meta)
 }
 
 public class MetaTextAreaView: UIView {
     
     // let logger = Logger(subsystem: "MetaTextAreaView", category: "Layout")
     let logger = Logger(OSLog.disabled)
+         
+    let tapGestureRecognizer = UITapGestureRecognizer()
     
     public let textContentStorage = NSTextContentStorage()
     public let textLayoutManager = NSTextLayoutManager()
@@ -76,6 +79,10 @@ public class MetaTextAreaView: UIView {
         
         textLayoutManager.delegate = self                               ///< NSTextLayoutManagerDelegate
         textLayoutManager.textViewportLayoutController.delegate = self  ///< NSTextViewportLayoutControllerDelegate
+        
+        addGestureRecognizer(tapGestureRecognizer)
+        tapGestureRecognizer.addTarget(self, action: #selector(MetaTextAreaView.tapGestureRecognizerHandler(_:)))
+        tapGestureRecognizer.delaysTouchesBegan = false
     }
     
     public override func layoutSubviews() {
@@ -128,6 +135,49 @@ public class MetaTextAreaView: UIView {
         logger.log(level: .debug, "\((#file as NSString).lastPathComponent, privacy: .public)[\(#line, privacy: .public)], \(#function, privacy: .public)")
     }
     
+}
+
+extension MetaTextAreaView {
+    
+    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        return meta(at: point) != nil
+    }
+    
+    func meta(at point: CGPoint) -> Meta? {
+        guard let fragment = textLayoutManager.textLayoutFragment(for: point) else { return nil }
+        
+        let pointInFragmentFrame = CGPoint(
+            x: point.x - fragment.layoutFragmentFrame.origin.x,
+            y: point.y - fragment.layoutFragmentFrame.origin.y
+        )
+        let lines = fragment.textLineFragments
+        guard let lineIndex = lines.firstIndex(where: { $0.typographicBounds.contains(pointInFragmentFrame) }) else { return nil }
+        guard lineIndex < lines.count else { return nil }
+        let line = lines[lineIndex]
+        
+        let characterIndex = line.characterIndex(for: point)
+        guard characterIndex >= 0, characterIndex < line.attributedString.length else { return nil }
+        
+        guard let meta = line.attributedString.attribute(.meta, at: characterIndex, effectiveRange: nil) as? Meta else {
+            return nil
+        }
+        return meta
+    }
+    
+}
+
+extension MetaTextAreaView {
+    @objc private func tapGestureRecognizerHandler(_ sender: UITapGestureRecognizer) {
+        logger.log(level: .debug, "\((#file as NSString).lastPathComponent, privacy: .public)[\(#line, privacy: .public)], \(#function, privacy: .public)")
+        switch sender.state {
+        case .ended:
+            let point = sender.location(in: self)
+            guard let meta = meta(at: point) else { return }
+            delegate?.metaTextAreaView(self, didSelectMeta: meta)
+        default:
+            break
+        }
+    }
 }
 
 extension MetaTextAreaView {

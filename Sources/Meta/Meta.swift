@@ -51,4 +51,23 @@ extension Meta {
             moveEntity.range.location += offset
         }
     }
+    
+}
+
+// MARK: - CustomDebugStringConvertible
+extension Meta: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch self {
+        case .url(let text, _, _, _):
+            return text
+        case .hashtag(let text, _, _):
+            return text
+        case .mention(let text, _, _):
+            return text
+        case .email(let text, _):
+            return text
+        case .emoji(let text, _, _, _):
+            return text
+        }
+    }
 }
