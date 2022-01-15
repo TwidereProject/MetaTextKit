@@ -83,6 +83,9 @@ public class MetaTextAreaView: UIView {
         addGestureRecognizer(tapGestureRecognizer)
         tapGestureRecognizer.addTarget(self, action: #selector(MetaTextAreaView.tapGestureRecognizerHandler(_:)))
         tapGestureRecognizer.delaysTouchesBegan = false
+        
+        isAccessibilityElement = true
+        accessibilityTraits = .staticText
     }
     
     public override func layoutSubviews() {
@@ -266,4 +269,15 @@ extension MetaTextAreaView: NSTextLayoutManagerDelegate {
 //            return MetaParagraphTextLayoutFragment(textElement: textElement, range: textElement.elementRange)
 //        }
 //    }
+}
+
+
+extension MetaTextAreaView {
+    public override var accessibilityFrame: CGRect {
+        get {
+            guard let superview = self.superview else { return .zero }
+            return UIAccessibility.convertToScreenCoordinates(frame, in: superview)
+        }
+        set { }
+    }
 }

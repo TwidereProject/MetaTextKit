@@ -23,11 +23,13 @@ extension  MetaTextAreaView {
         )
         
         setAttributedString(attributedString)
+        accessibilityLabel = content.string
     }
     
     public func reset() {
         let attributedString = NSAttributedString(string: "")
         setAttributedString(attributedString)
+        accessibilityLabel = nil
     }
     
 }
