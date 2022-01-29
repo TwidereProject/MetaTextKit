@@ -81,9 +81,14 @@ extension MetaText {
 
 extension MetaText {
 
-    public func configure(content: MetaContent) {
+    public func configure(
+        content: MetaContent,
+        isRedactedModeEnabled: Bool = false
+    ) {
         let attributedString = NSMutableAttributedString(string: content.string)
 
+        layoutManager.isRedactedModeEnabled = isRedactedModeEnabled
+        
         MetaText.setAttributes(
             for: attributedString,
             textAttributes: textAttributes,
