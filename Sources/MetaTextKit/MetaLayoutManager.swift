@@ -14,7 +14,14 @@ public class MetaLayoutManager: NSLayoutManager {
     static let displayAttachmentContentViewTag = 13626
     
     public static var normalRedactedTextColor = UIColor.systemGray6
-    public static var highlightRedactedTextColor = UIColor(red: 242.0/255.0, green: 248.0/255.0, blue: 253.0/255.0, alpha: 1.0)
+    public static var highlightRedactedTextColor = UIColor { traitCollection in
+        switch traitCollection.userInterfaceStyle {
+        case .dark:
+            return UIColor(red: 43.0/255.0, green: 67.0/255.0, blue: 87.0/255.0, alpha: 1.0)
+        default:
+            return UIColor(red: 242.0/255.0, green: 248.0/255.0, blue: 253.0/255.0, alpha: 1.0)
+        }
+    }
 
     /// Label or TextView
     weak var hostView: UIView?
