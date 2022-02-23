@@ -5,7 +5,7 @@
 //  Created by Cirno MainasuK on 2021-9-3.
 //
 
-import Foundation
+import UIKit
 import Meta
 import MetaTextKit
 
@@ -25,7 +25,7 @@ extension MetaTextAreaView {
         setAttributedString(attributedString)
         
         // a11y
-        accessibilityElements = content.entities.compactMap { entity in
+        let elements = content.entities.compactMap { entity -> AccessibilityElement? in
             switch entity.meta {
             case .url, .hashtag, .mention, .email:
                 return AccessibilityElement(accessibilityContainer: self, entity: entity)
@@ -33,6 +33,10 @@ extension MetaTextAreaView {
                 return nil
             }
         }
+        
+        let container = AccessibilityContainer(accessibilityContainer: self, content: content)
+        
+        accessibilityElements = [container] + elements
     }
     
     public func reset() {
