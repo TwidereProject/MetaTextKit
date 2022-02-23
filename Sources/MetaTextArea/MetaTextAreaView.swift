@@ -46,7 +46,7 @@ public class MetaTextAreaView: UIView {
     
     private let attachmentView = UIView()
     private let contentLayer = MetaTextAreaLayer()
-    private let fragmentLayerMap = NSMapTable<NSTextLayoutFragment, CALayer>.weakToWeakObjects()
+    let fragmentLayerMap = NSMapTable<NSTextLayoutFragment, CALayer>.weakToWeakObjects()
     
     #if DEBUG
     public static var showLayerFrames: Bool = false
@@ -84,12 +84,12 @@ public class MetaTextAreaView: UIView {
         tapGestureRecognizer.addTarget(self, action: #selector(MetaTextAreaView.tapGestureRecognizerHandler(_:)))
         tapGestureRecognizer.delaysTouchesBegan = false
         
-        isAccessibilityElement = true
-        accessibilityTraits = .staticText
+        accessibilityContainerType = .semanticGroup
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+        
         invalidateIntrinsicContentSize()
         logger.log(level: .debug, "\((#file as NSString).lastPathComponent, privacy: .public)[\(#line, privacy: .public)], \(#function, privacy: .public): bounds \(self.bounds.debugDescription)")
     }
@@ -191,11 +191,11 @@ extension MetaTextAreaView {
 }
 
 extension MetaTextAreaView {
-    
     private func resetContent() {
         attachmentView.subviews.forEach { view in view.removeFromSuperview() }
         contentLayer.sublayers?.forEach { layer in layer.removeFromSuperlayer() }
         contentLayer.sublayers = nil
+        fragmentLayerMap.removeAllObjects()
     }
 }
 
@@ -269,15 +269,4 @@ extension MetaTextAreaView: NSTextLayoutManagerDelegate {
 //            return MetaParagraphTextLayoutFragment(textElement: textElement, range: textElement.elementRange)
 //        }
 //    }
-}
-
-
-extension MetaTextAreaView {
-    public override var accessibilityFrame: CGRect {
-        get {
-            guard let superview = self.superview else { return .zero }
-            return UIAccessibility.convertToScreenCoordinates(frame, in: superview)
-        }
-        set { }
-    }
 }

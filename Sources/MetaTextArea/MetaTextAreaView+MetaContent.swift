@@ -9,7 +9,7 @@ import Foundation
 import Meta
 import MetaTextKit
 
-extension  MetaTextAreaView {
+extension MetaTextAreaView {
     
     public func configure(content: MetaContent) {
         let attributedString = NSMutableAttributedString(string: content.string)
@@ -23,13 +23,22 @@ extension  MetaTextAreaView {
         )
         
         setAttributedString(attributedString)
-        accessibilityLabel = content.string
+        
+        // a11y
+        accessibilityElements = content.entities.compactMap { entity in
+            switch entity.meta {
+            case .url, .hashtag, .mention, .email:
+                return AccessibilityElement(accessibilityContainer: self, entity: entity)
+            case .emoji:
+                return nil
+            }
+        }
     }
     
     public func reset() {
         let attributedString = NSAttributedString(string: "")
         setAttributedString(attributedString)
-        accessibilityLabel = nil
+        accessibilityElements = nil
     }
     
 }
