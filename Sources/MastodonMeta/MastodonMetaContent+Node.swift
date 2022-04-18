@@ -108,7 +108,8 @@ extension MastodonMetaContent {
                 _ = scanner.scanUpToString(_text)
                 let startIndexOffset = scanner.currentIndex.utf16Offset(in: scanner.string)
                 guard scanner.scanString(_text) != nil else {
-                    assertionFailure()
+                    // FIXME: some emoji break the paser
+                    // assertionFailure()
                     continue
                 }
                 let endIndexOffset = scanner.currentIndex.utf16Offset(in: scanner.string)
