@@ -165,10 +165,14 @@ extension MetaText {
         )
 
         // meta
+        let stringRange = NSRange(location: 0, length: attributedString.length)
         for entity in content.entities {
             var linkAttributes = linkAttributes
             linkAttributes[.meta] = entity.meta
-            attributedString.addAttributes(linkAttributes, range: entity.range)
+            // FIXME: the emoji make cause wrong entity range out of bounds
+            // workaround: use intersection range temporary
+            let range = NSIntersectionRange(stringRange, entity.range)
+            attributedString.addAttributes(linkAttributes, range: range)
         }
 
         // paragraph
