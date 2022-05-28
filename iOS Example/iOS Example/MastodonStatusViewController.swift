@@ -8,14 +8,20 @@
 import os.log
 import UIKit
 import Meta
-import MetaTextView
 import MastodonMeta
+import MetaTextKit
 
 class MastodonStatusViewController: UIViewController {
 
     let singleLineMetaText: MetaText = {
         let metaText = MetaText()
         metaText.textView.textContainer.maximumNumberOfLines = 1
+        metaText.textView.isEditable = false
+        metaText.textView.isScrollEnabled = false
+        return metaText
+    }()
+    let statusMetaText: MetaText = {
+        let metaText = MetaText()
         metaText.textView.isEditable = false
         metaText.textView.isScrollEnabled = false
         return metaText
@@ -71,11 +77,19 @@ class MastodonStatusViewController: UIViewController {
             singleLineMetaText.textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             singleLineMetaText.textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+        
+        statusMetaText.textView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(statusMetaText.textView)
+        NSLayoutConstraint.activate([
+            statusMetaText.textView.topAnchor.constraint(equalTo: singleLineMetaText.textView.bottomAnchor),
+            statusMetaText.textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            statusMetaText.textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
 
         metaText.textView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(metaText.textView)
         NSLayoutConstraint.activate([
-            metaText.textView.topAnchor.constraint(equalTo: singleLineMetaText.textView.bottomAnchor),
+            metaText.textView.topAnchor.constraint(equalTo: statusMetaText.textView.bottomAnchor),
             metaText.textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             metaText.textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             metaText.textView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -83,8 +97,9 @@ class MastodonStatusViewController: UIViewController {
 
         metaText.delegate = self
 
-        setupLabelContent()
-        setupTextEditorContent()
+//        setupLabelContent()
+        setupStatusContent()
+//        setupTextEditorContent()
     }
 
 }
@@ -95,12 +110,27 @@ extension MastodonStatusViewController {
         let content = (0..<100)
             .compactMap { _ in ":" + emojis.keys.randomElement()! + ":" }
             .joined(separator: " ")
+        
 
         do {
             let metaContent = try MastodonMetaContent.convert(
                 document: MastodonContent(content: content, emojis: emojis)
             )
             singleLineMetaText.configure(content: metaContent)
+        } catch {
+            assertionFailure()
+        }
+    }
+    
+    func setupStatusContent() {
+        let content = """
+        <p>:sabakan: <a href=\"https://mastodon.social/tags/Mastodon\" class=\"mention hashtag\" rel=\"nofollow noopener noreferrer\" target=\"_blank\">#<span>Mastodon</span></a> 3.5.3 has just been released with multiple security fixes, as well as a couple cool improvements!</p><p><a href=\"https://github.com/mastodon/mastodon/releases/tag/v3.5.3\" rel=\"nofollow noopener noreferrer\" target=\"_blank\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">github.com/mastodon/mastodon/r</span><span class=\"invisible\">eleases/tag/v3.5.3</span></a></p><p>A 3.4.8 backport is available for those who haven\'t made the jump to 3.5 yet.</p>
+        """
+        do {
+            let metaContent = try MastodonMetaContent.convert(
+                document: MastodonContent(content: content, emojis: emojis)
+            )
+            statusMetaText.configure(content: metaContent)
         } catch {
             assertionFailure()
         }
@@ -169,6 +199,7 @@ extension MastodonStatusViewController {
             "ablobattention": "https://media.mstdn.jp/custom_emojis/images/000/123/539/original/f3b1abf131a34b6c.png",
             "ablobcaramelldansen": "https://media.mstdn.jp/custom_emojis/images/000/120/885/original/75cb4f59948b69ce.png",
             "ablobattentionreverse": "https://media.mstdn.jp/custom_emojis/images/000/120/907/original/d0320f5180028c28.png",
+            "sabakan": "https://media.mstdn.jp/custom_emojis/images/000/009/467/original/2b20a39ee04c39f5.png",
         ]
     }
 

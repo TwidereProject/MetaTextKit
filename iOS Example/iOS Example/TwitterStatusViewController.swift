@@ -8,8 +8,8 @@
 import os.log
 import UIKit
 import Meta
-import MetaTextView
 import TwitterMeta
+import MetaTextKit
 import twitter_text
 
 class TwitterStatusViewController: UIViewController {

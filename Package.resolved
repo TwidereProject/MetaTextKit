@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
+        "state": {
+          "branch": null,
+          "revision": "354dda32d89fc8cd4f5c46487f64957d355f53d8",
+          "version": "5.6.1"
+        }
+      },
+      {
         "package": "Fuzi",
         "repositoryURL": "https://github.com/cezheng/Fuzi.git",
         "state": {
@@ -11,12 +20,12 @@
         }
       },
       {
-        "package": "Nuke",
-        "repositoryURL": "https://github.com/kean/Nuke.git",
+        "package": "SDWebImage",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {
           "branch": null,
-          "revision": "69ae6d5b8c4b898450432f94bd35f863d3830cfc",
-          "version": "10.3.0"
+          "revision": "2e63d0061da449ad0ed130768d05dceb1496de44",
+          "version": "5.12.5"
         }
       }
     ]

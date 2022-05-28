@@ -175,10 +175,8 @@ extension MetaText {
             attributedString.addAttributes(linkAttributes, range: range)
         }
 
-        // paragraph
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
-
         // attachment
+        // set after the text & meta then inject the attachment
         var replacedAttachments: [MetaAttachment] = []
         for entity in content.entities.reversed() {
             guard let attachment = content.metaAttachment(for: entity) else { continue }
@@ -191,8 +189,13 @@ extension MetaText {
                 size: CGSize(width: fontSize, height: fontSize)
             )
 
+            // inject attachment via replace string at entity range
             attributedString.replaceCharacters(in: entity.range, with: NSAttributedString(attachment: attachment))
         }
+        
+        // paragraph
+        // set after attachment to prevent paragraphStyle be replaced (e.g. attachment at the head of paragraph)
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
 
         return replacedAttachments
     }
