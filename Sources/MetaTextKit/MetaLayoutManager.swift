@@ -34,23 +34,6 @@ public class MetaLayoutManager: NSLayoutManager {
 
             var frame = attachment.contentFrame
             frame.origin.y -= frame.height      // tweak frame
-            if frame.origin.x == 0 {
-                // attachment user interact (a.k.a long press) cause origin.x set to ZERO with wrong origin.y
-                // which cause the wrong image view position
-                // check it and locate to correct location here
-                let glyphRange = glyphRange(forCharacterRange: range, actualCharacterRange: nil)
-                if let textContainer = textContainer(forGlyphAt: glyphRange.location, effectiveRange: nil) {
-                    let glyphBounds = boundingRect(forGlyphRange: glyphRange, in: textContainer)
-                    frame.origin.x = glyphBounds.origin.x
-                    let textViewPadding: CGFloat = {
-                        var padding = textContainer.lineFragmentPadding
-                        guard let textView = hostView as? UITextView else { return padding }
-                        padding += textView.contentInset.top
-                        return padding
-                    }()
-                    frame.origin.y = glyphBounds.origin.y + textViewPadding
-                }
-            }
             attachment.content.frame = frame
 
             if attachment.content.superview == nil {
