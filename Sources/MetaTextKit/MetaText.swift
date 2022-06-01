@@ -148,7 +148,7 @@ extension MetaText {
     ) -> [MetaAttachment] {
 
         // clean up
-        let allRange = NSRange(location: 0, length: attributedString.length)
+        var allRange = NSRange(location: 0, length: attributedString.length)
         for key in textAttributes.keys {
             attributedString.removeAttribute(key, range: allRange)
         }
@@ -192,7 +192,8 @@ extension MetaText {
             // inject attachment via replace string at entity range
             attributedString.replaceCharacters(in: entity.range, with: NSAttributedString(attachment: attachment))
         }
-        
+        allRange = NSRange(location: 0, length: attributedString.length)
+
         // paragraph
         // set after attachment to prevent paragraphStyle be replaced (e.g. attachment at the head of paragraph)
         attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
