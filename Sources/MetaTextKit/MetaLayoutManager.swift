@@ -28,9 +28,7 @@ public class MetaLayoutManager: NSLayoutManager {
             in: NSRange(location: 0, length: texStorage.length),
             options: .reverse)
         { attachment, range, canStop in
-            guard let attachment = attachment as? MetaAttachment else {
-                return
-            }
+            guard let attachment = attachment as? MetaAttachment else { return }
 
             var frame = attachment.contentFrame
             frame.origin.y -= frame.height      // tweak frame

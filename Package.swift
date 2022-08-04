@@ -12,6 +12,7 @@ let package = Package(
             targets: [
                 "MetaTextKit",
                 "MetaTextArea",
+                "MetaLabel",
                 "MastodonMeta",
                 "TwitterMeta",
                 "Meta",
@@ -30,6 +31,9 @@ let package = Package(
         .target(
             name: "MetaTextArea",
             dependencies: ["Meta", "MetaTextKit"]),
+        .target(
+            name: "MetaLabel",
+            dependencies: ["MetaTextArea"]),
         .target(
             name: "MetaTextKit",
             dependencies: ["Meta"]),
