@@ -21,21 +21,21 @@ public class MetaLabel: UIView {
 
     public weak var delegate: MetaLabelDelegate?
     
-    let textArea = MetaTextAreaView()
+    public let textArea = MetaTextAreaView()
 
     public var paragraphStyle: NSMutableParagraphStyle {
         get { textArea.paragraphStyle }
-        set { textArea.paragraphStyle }
+        set { textArea.paragraphStyle = newValue }
     }
 
     public var textAttributes: [NSAttributedString.Key: Any] {
         get { textArea.textAttributes }
-        set { textArea.textAttributes }
+        set { textArea.textAttributes = newValue }
     }
 
     public var linkAttributes: [NSAttributedString.Key: Any] {
         get { textArea.linkAttributes }
-        set { textArea.linkAttributes }
+        set { textArea.linkAttributes = newValue }
     }
 
     let tapGestureRecognizer = UITapGestureRecognizer()
@@ -51,45 +51,19 @@ public class MetaLabel: UIView {
             textArea.trailingAnchor.constraint(equalTo: trailingAnchor),
             textArea.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
+        textArea.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        textArea.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
+        textArea.textContainer.lineBreakMode = .byTruncatingTail
         textArea.textContainer.maximumNumberOfLines = 1
+        textArea.textContainer.lineFragmentPadding = 0
         textArea.delegate = self
-//        textLayoutManager.delegate = self                               ///< NSTextLayoutManagerDelegate
-//        textLayoutManager.textViewportLayoutController.delegate = self  ///< NSTextViewportLayoutControllerDelegate
-
-//        layoutManager.usesFontLeading = false
-//        textContainer.lineFragmentPadding = 0
-//
-//        textStorage.addLayoutManager(layoutManager)
-//        layoutManager.addTextContainer(textContainer)
-//        layoutManager.hostView = self
-//
-//        isUserInteractionEnabled = true
-//        addGestureRecognizer(tapGestureRecognizer)
-//
-//        tapGestureRecognizer.addTarget(self, action: #selector(MetaLabel.tapGestureRecognizerHandler(_:)))
-//        tapGestureRecognizer.delaysTouchesBegan = false
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-}
-
-extension MetaLabel {
-    @objc private func tapGestureRecognizerHandler(_ sender: UITapGestureRecognizer) {
-        os_log(.info, "%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
-
-//        switch sender.state {
-//        case .ended:
-//            let point = sender.location(in: self)
-//            guard let meta = meta(at: point) else { return }
-//            linkDelegate?.metaLabel(self, didSelectMeta: meta)
-//        default:
-//            break
-//        }
-    }
 }
 
 extension MetaLabel {
@@ -102,7 +76,8 @@ extension MetaLabel {
             from: textArea.textLayoutManager.documentRange.endLocation,
             options: [.ensuresLayout, .reverse]
         ) { layoutFragment in
-            size = layoutFragment.layoutFragmentFrame.size
+            // prefer glyph bounds
+            size = layoutFragment.textLineFragments.first?.typographicBounds.size ?? layoutFragment.layoutFragmentFrame.size
             return false // stop
         }
         return CGSize(
@@ -126,6 +101,7 @@ extension MetaLabel {
         
         textArea.configure(content: content)
         invalidateIntrinsicContentSize()
+        setNeedsDisplay()
     }
 
     public func reset() {
