@@ -63,7 +63,7 @@ public class MetaText: NSObject {
 
 extension MetaText {
 
-    open var backedString: String {
+    public var backedString: String {
         let string = textStorage.string
         let nsString = NSMutableString(string: string)
         textStorage.enumerateAttribute(
@@ -105,7 +105,7 @@ extension MetaText {
 
 // MARK: - MetaTextStorageDelegate
 extension MetaText: MetaTextStorageDelegate {
-    open func processEditing(_ textStorage: MetaTextStorage) -> MetaContent? {
+    public func processEditing(_ textStorage: MetaTextStorage) -> MetaContent? {
         // note: check the attachment content view needs remove or not
         // "Select All" then delete text not call the `drawGlyphs` methold
         if textStorage.length == 0 {
@@ -178,11 +178,10 @@ extension MetaText {
 
             let font = attributedString.attribute(.font, at: entity.range.location, effectiveRange: nil) as? UIFont
             let fontSize = font?.pointSize ?? MetaText.fontSize
-            attachment.bounds = CGRect(
-                origin: CGPoint(x: 0, y: -floor(fontSize / 5)),  // magic descender
+            attachment.contentFrame = CGRect(
+                origin: .zero,
                 size: CGSize(width: fontSize, height: fontSize)
             )
-
             attributedString.replaceCharacters(in: entity.range, with: NSAttributedString(attachment: attachment))
         }
         allRange = NSRange(location: 0, length: attributedString.length)

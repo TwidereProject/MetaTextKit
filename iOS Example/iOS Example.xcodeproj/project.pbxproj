@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB585015269D6312006CB091 /* TwitterStatusViewController.swift */; };
-		DB58501E269D6A5F006CB091 /* TwitterMeta in Frameworks */ = {isa = PBXBuildFile; productRef = DB58501D269D6A5F006CB091 /* TwitterMeta */; };
 		DB71CF1526B3D9B10018F605 /* MetaTextKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB71CF1426B3D9B10018F605 /* MetaTextKit */; };
 		DB71CF1726B3DD9A0018F605 /* TextAreaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB71CF1626B3DD9A0018F605 /* TextAreaViewController.swift */; };
 		DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB837010266E1730005CE2A1 /* AppDelegate.swift */; };
@@ -18,7 +17,6 @@
 		DB83701D266E1732005CE2A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB83701B266E1732005CE2A1 /* LaunchScreen.storyboard */; };
 		DB83702B266E1E8F005CE2A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83702A266E1E8F005CE2A1 /* TabBarController.swift */; };
 		DBA4605E268630B0004E094B /* MastodonStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA4605D268630B0004E094B /* MastodonStatusViewController.swift */; };
-		DBA4606026863161004E094B /* MastodonMeta in Frameworks */ = {isa = PBXBuildFile; productRef = DBA4605F26863161004E094B /* MastodonMeta */; };
 		F8B964941D76B076507665B1 /* Pods_iOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAD19EE75CEEA66BEE085A2E /* Pods_iOS_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,8 +43,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DBA4606026863161004E094B /* MastodonMeta in Frameworks */,
-				DB58501E269D6A5F006CB091 /* TwitterMeta in Frameworks */,
 				F8B964941D76B076507665B1 /* Pods_iOS_Example.framework in Frameworks */,
 				DB71CF1526B3D9B10018F605 /* MetaTextKit in Frameworks */,
 			);
@@ -127,8 +123,6 @@
 			);
 			name = "iOS Example";
 			packageProductDependencies = (
-				DBA4605F26863161004E094B /* MastodonMeta */,
-				DB58501D269D6A5F006CB091 /* TwitterMeta */,
 				DB71CF1426B3D9B10018F605 /* MetaTextKit */,
 			);
 			productName = "iOS Example";
@@ -310,7 +304,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -365,7 +359,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -384,6 +378,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = "iOS Example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -404,6 +399,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = "iOS Example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -439,17 +435,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		DB58501D269D6A5F006CB091 /* TwitterMeta */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TwitterMeta;
-		};
 		DB71CF1426B3D9B10018F605 /* MetaTextKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaTextKit;
-		};
-		DBA4605F26863161004E094B /* MastodonMeta */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MastodonMeta;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

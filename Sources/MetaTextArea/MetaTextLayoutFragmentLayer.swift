@@ -59,6 +59,9 @@ class MetaTextLayoutFragmentLayer: CALayer {
                 options: []
             ) { attachment, range, _ in
                 guard let attachment = attachment as? MetaAttachment else { return }
+                guard let viewProvider = attachment.viewProvider else { return }
+                guard let attachmentView = viewProvider.view else { return }
+
                 let startLocation = textLineFragment.characterRange.location
                 let attachmentFrameMinLocation = textLineFragment.locationForCharacter(at: startLocation + range.lowerBound)
                 let rect = CGRect(
@@ -68,9 +71,9 @@ class MetaTextLayoutFragmentLayer: CALayer {
                     height: textLineFragmentTypographicBounds.height
                 )
                 
-                attachment.content.frame = rect
-                if attachment.content.superview == nil {
-                    contentView?.addSubview(attachment.content)
+                attachmentView.frame = rect
+                if attachmentView.superview == nil {
+                    contentView?.addSubview(attachmentView)
                 }
             }   // end enumerateAttribute
         }   // end for

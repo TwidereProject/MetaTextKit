@@ -7,10 +7,11 @@
 
 import UIKit
 import MetaTextKit
+import MetaTextArea
 
 class TextAreaViewController: UIViewController {
     
-    let textAreaView = TextAreaView()
+    let textAreaView = MetaTextAreaView()
     
     let showLayerFramesBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "rectangle.dashed"), style: .plain, target: nil, action: nil)
     
@@ -50,7 +51,10 @@ class TextAreaViewController: UIViewController {
 
 extension TextAreaViewController {
     @objc private func showLayerFramesBarButtonItemPressed(_ sender: UIBarButtonItem) {
-        textAreaView.showLayerFrames.toggle()
+        #if DEBUG
+        MetaTextAreaView.showLayerFrames.toggle()
+        #endif
+        
         textAreaView.textLayoutManager.textViewportLayoutController.layoutViewport()
     }
 }
