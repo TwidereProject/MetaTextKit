@@ -54,12 +54,15 @@ extension TwitterMetaContent {
             }
         }
 
-        let trimmed = Meta.trim(content: original, orderedEntities: entities)
+        let orderedEntities = entities.sorted(by: {
+            $0.range.location < $1.range.location || $0.range.length < $1.range.length
+        })
+        let trimmed = Meta.trim(content: original, orderedEntities: orderedEntities)
 
         return TwitterMetaContent(
             original: original,
             trimmed: trimmed,
-            entities: entities
+            entities: orderedEntities
         )
     }
 

@@ -13,3 +13,18 @@ public protocol MetaContent {
 
     func metaAttachment(for entity: Meta.Entity) -> MetaAttachment?
 }
+
+extension MetaContent {
+    public var attributedString: AttributedString {
+        let attributedString = NSMutableAttributedString(string: string)
+        
+        // meta
+        let stringRange = NSRange(location: 0, length: attributedString.length)
+        for entity in entities {
+            let range = NSIntersectionRange(stringRange, entity.range)
+            attributedString.addAttribute(.link, value: entity.primaryText, range: range)
+        }
+
+        return AttributedString(attributedString)
+    }
+}
