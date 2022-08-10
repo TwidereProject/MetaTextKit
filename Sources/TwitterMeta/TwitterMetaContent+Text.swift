@@ -18,6 +18,7 @@ extension TwitterMetaContent {
         let original = content.content
         var entities: [Meta.Entity] = []
         let twitterTextEntities = twitterTextProvider.entities(in: original)
+            .sorted(by: { $0.range.location < $1.range.location })
 
         for twitterTextEntity in twitterTextEntities {
             let range = twitterTextEntity.range
@@ -55,7 +56,7 @@ extension TwitterMetaContent {
         }
 
         let orderedEntities = entities.sorted(by: {
-            $0.range.location < $1.range.location || $0.range.length < $1.range.length
+            $0.range.location < $1.range.location
         })
         let trimmed = Meta.trim(content: original, orderedEntities: orderedEntities)
 
