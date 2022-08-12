@@ -110,7 +110,11 @@ public class MetaTextAreaView: UIView {
     
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         // update textContainer width
-        textContainer.size.width = size.width
+        if textContainer.maximumNumberOfLines == 1 {
+            textContainer.size.width = CGFloat.greatestFiniteMagnitude
+        } else {
+            textContainer.size.width = size.width
+        }
         
         // needs always draw to fit tableView/collectionView cell reusing
         // also, make precise height calculate possible

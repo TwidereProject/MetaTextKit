@@ -59,21 +59,40 @@ class MetaTextLayoutFragmentLayer: CALayer {
                 options: []
             ) { attachment, range, _ in
                 guard let attachment = attachment as? MetaAttachment else { return }
-                guard let viewProvider = attachment.viewProvider else { return }
-                guard let attachmentView = viewProvider.view else { return }
-
-                let startLocation = textLineFragment.characterRange.location
-                let attachmentFrameMinLocation = textLineFragment.locationForCharacter(at: startLocation + range.lowerBound)
-                let rect = CGRect(
-                    x: attachmentFrameMinLocation.x,
-                    y: textLineFragmentTypographicBounds.minY + self.frame.minY,
-                    width: attachment.contentFrame.width,
-                    height: textLineFragmentTypographicBounds.height
-                )
                 
-                attachmentView.frame = rect
-                if attachmentView.superview == nil {
-                    contentView?.addSubview(attachmentView)
+                if #available(iOS 16, *) {
+                    guard let viewProvider = attachment.viewProvider else { return }
+                    guard let attachmentView = viewProvider.view else { return }
+                    
+                    let startLocation = textLineFragment.characterRange.location
+                    let attachmentFrameMinLocation = textLineFragment.locationForCharacter(at: startLocation + range.lowerBound)
+                    let rect = CGRect(
+                        x: attachmentFrameMinLocation.x,
+                        y: textLineFragmentTypographicBounds.minY + self.frame.minY,
+                        width: attachment.contentFrame.width,
+                        height: textLineFragmentTypographicBounds.height
+                    )
+                    
+                    attachmentView.frame = rect
+                    if attachmentView.superview == nil {
+                        contentView?.addSubview(attachmentView)
+                    }
+                    
+                } else {
+                    let startLocation = textLineFragment.characterRange.location
+                    let attachmentFrameMinLocation = textLineFragment.locationForCharacter(at: startLocation + range.lowerBound)
+                    let rect = CGRect(
+                        x: attachmentFrameMinLocation.x,
+                        y: textLineFragmentTypographicBounds.minY + self.frame.minY,
+                        width: attachment.contentFrame.width,
+                        height: textLineFragmentTypographicBounds.height
+                    )
+                    
+                    attachment.content.frame = rect
+                    if attachment.content.superview == nil {
+                        contentView?.addSubview(attachment.content)
+
+                    }
                 }
             }   // end enumerateAttribute
         }   // end for

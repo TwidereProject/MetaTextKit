@@ -96,9 +96,11 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         self.string = string
         self.url = url
         self.content = content
-        super.init(data: nil, ofType: "public.apng")
-        
-        allowsTextAttachmentView = true
+        super.init(data: nil, ofType: UTType.image.identifier)
+
+        if #available(iOS 16, *) {
+            allowsTextAttachmentView = true
+        }
         image = MastodonMetaAttachment.placeholderImage
     }
     
@@ -106,17 +108,13 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func attachmentBounds(
-        for textContainer: NSTextContainer?,
-        proposedLineFragment lineFrag: CGRect,
-        glyphPosition position: CGPoint,
-        characterIndex charIndex: Int
-    ) -> CGRect {
-        return contentFrame
-    }
-    
-    public override func image(forBounds imageBounds: CGRect, textContainer: NSTextContainer?, characterIndex charIndex: Int) -> UIImage? {
-        contentFrame = imageBounds
+    public override func image(
+        for bounds: CGRect,
+        attributes: [NSAttributedString.Key : Any] = [:],
+        location: NSTextLocation,
+        textContainer: NSTextContainer?
+    ) -> UIImage? {
+        contentFrame = bounds
 
         imageView?.contentMode = .scaleAspectFit
         imageView?.sd_setImage(with: URL(string: url)) { [weak self] image, error, cacheType, url in
@@ -127,23 +125,14 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
                 // resize transformer not works for APNG
                 // force resize for single frame animated image
                 let scale: CGFloat = 3
-                let size = CGSize(width: ceil(imageBounds.size.width * scale), height: ceil(imageBounds.size.height * scale))
+                let size = CGSize(width: ceil(bounds.size.width * scale), height: ceil(bounds.size.height * scale))
                 self.imageView?.image = image.sd_resizedImage(with: size, scaleMode: .aspectFit)
                 return
             }
         }
         
-        let image = super.image(forBounds: imageBounds, textContainer: textContainer, characterIndex: charIndex)
+        let image = super.image(for: bounds, attributes: attributes, location: location, textContainer: textContainer)
         return image
-    }
-    
-    public override func image(
-        for bounds: CGRect,
-        attributes: [NSAttributedString.Key : Any] = [:],
-        location: NSTextLocation,
-        textContainer: NSTextContainer?
-    ) -> UIImage? {
-        return nil
     }
     
     public override func viewProvider(

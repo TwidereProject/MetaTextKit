@@ -58,6 +58,8 @@ public class MetaLabel: UIView {
         textArea.textContainer.maximumNumberOfLines = 1
         textArea.textContainer.lineFragmentPadding = 0
         textArea.delegate = self
+        
+        textArea.layer.masksToBounds = true
     }
 
     required init?(coder: NSCoder) {

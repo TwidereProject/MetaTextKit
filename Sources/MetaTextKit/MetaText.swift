@@ -178,10 +178,17 @@ extension MetaText {
 
             let font = attributedString.attribute(.font, at: entity.range.location, effectiveRange: nil) as? UIFont
             let fontSize = font?.pointSize ?? MetaText.fontSize
-            attachment.contentFrame = CGRect(
-                origin: .zero,
-                size: CGSize(width: fontSize, height: fontSize)
-            )
+            if #available(iOS 16, *) {
+                attachment.contentFrame = CGRect(
+                    origin: .zero,
+                    size: CGSize(width: fontSize, height: fontSize)
+                )
+            } else {
+                attachment.bounds = CGRect(
+                    origin: .zero,
+                    size: CGSize(width: fontSize, height: fontSize)
+                )
+            }
             attributedString.replaceCharacters(in: entity.range, with: NSAttributedString(attachment: attachment))
         }
         allRange = NSRange(location: 0, length: attributedString.length)
