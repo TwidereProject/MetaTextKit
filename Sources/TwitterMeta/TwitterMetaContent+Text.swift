@@ -25,9 +25,18 @@ extension TwitterMetaContent {
             guard let text = original.string(in: range) else { continue }
             switch twitterTextEntity {
             case .url:
+                let trimmed: String = {
+                    if text.lowercased().hasPrefix("https://") {
+                        return String(text.dropFirst("https://".count)).trim(to: urlMaximumLength)
+                    } else if text.lowercased().hasPrefix("http://") {
+                        return String(text.dropFirst("http://".count)).trim(to: urlMaximumLength)
+                    } else {
+                        return text.trim(to: urlMaximumLength)
+                    }
+                }()
                 let entity = Meta.Entity(
                     range: range,
-                    meta: .url(text, trimmed: text.trim(to: urlMaximumLength), url: text, userInfo: nil)
+                    meta: .url(text, trimmed: trimmed, url: text, userInfo: nil)
                 )
                 entities.append(entity)
             case .screenName:
