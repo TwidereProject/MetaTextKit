@@ -32,10 +32,11 @@ extension MastodonMetaContent: MetaContent {
     public var string: String { trimmed }
 
     public func metaAttachment(for entity: Meta.Entity) -> MetaAttachment? {
-        guard case let .emoji(text, _, url, _) = entity.meta else { return nil }
+        guard case let .emoji(text, shortcode, url, _) = entity.meta else { return nil }
 
         let imageView = SDAnimatedImageView()
         let attachment = MastodonMetaAttachment(string: text, url: url, content: imageView)
+        attachment.accessibilityLabel = shortcode
         return attachment
     }
 }
