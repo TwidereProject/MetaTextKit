@@ -120,6 +120,8 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         imageView?.sd_setImage(with: URL(string: url)) { [weak self] image, error, cacheType, url in
             guard let self = self else { return }
             guard let image = image else { return }
+            self.image = image
+
             guard let totalFrameCount = self.imageView?.player?.totalFrameCount, totalFrameCount > 1
             else {
                 // resize transformer not works for APNG
