@@ -5,7 +5,7 @@
 //  Created by Cirno MainasuK on 2021-6-25.
 //
 
-import Foundation
+import UIKit
 
 public protocol MetaContent {
     var string: String { get }
@@ -15,7 +15,7 @@ public protocol MetaContent {
 }
 
 extension MetaContent {
-    public var attributedString: AttributedString {
+    public func attributedString(accentColor: UIColor) -> AttributedString {
         let attributedString = NSMutableAttributedString(string: string)
         
         // meta
@@ -23,6 +23,7 @@ extension MetaContent {
         for entity in entities {
             let range = NSIntersectionRange(stringRange, entity.range)
             attributedString.addAttribute(.link, value: entity.primaryText, range: range)
+            attributedString.addAttribute(.foregroundColor, value: accentColor, range: range)
         }
 
         return AttributedString(attributedString)
