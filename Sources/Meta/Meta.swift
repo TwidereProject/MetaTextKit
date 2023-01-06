@@ -10,6 +10,7 @@ import Foundation
 public enum Meta {
     case url(_ text: String, trimmed: String, url: String, userInfo: [AnyHashable: Any]? = nil)
     case hashtag(_ text: String, hashtag: String, userInfo: [AnyHashable: Any]? = nil)
+    case cashtag(_ text: String, cashtag: String, userInfo: [AnyHashable: Any]? = nil)
     case mention(_ text: String, mention: String, userInfo: [AnyHashable: Any]? = nil)
     case email(_ text: String, userInfo: [AnyHashable: Any]? = nil)
     case emoji(_ text: String, shortcode: String, url: String, userInfo: [AnyHashable: Any]? = nil)
@@ -61,6 +62,8 @@ extension Meta: CustomDebugStringConvertible {
         case .url(let text, _, _, _):
             return text
         case .hashtag(let text, _, _):
+            return text
+        case .cashtag(let text, _, _):
             return text
         case .mention(let text, _, _):
             return text

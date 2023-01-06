@@ -106,7 +106,7 @@ extension MetaTextAreaView.AccessibilityElement {
     override var accessibilityTraits: UIAccessibilityTraits {
         get {
             switch entity.meta {
-            case .url, .hashtag, .mention, .email:
+            case .url, .hashtag, .cashtag, .mention, .email:
                 return .link
             case .emoji:
                 return .staticText

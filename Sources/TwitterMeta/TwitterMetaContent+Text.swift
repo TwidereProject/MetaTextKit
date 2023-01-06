@@ -56,7 +56,12 @@ extension TwitterMetaContent {
             case .listName:
                 continue
             case .symbol:
-                continue
+                let cashtag = String(text.dropFirst())
+                let entity = Meta.Entity(
+                    range: range,
+                    meta: .cashtag(text, cashtag: cashtag, userInfo: nil)
+                )
+                entities.append(entity)
             case .tweetChar:
                 continue
             case .tweetEmojiChar:

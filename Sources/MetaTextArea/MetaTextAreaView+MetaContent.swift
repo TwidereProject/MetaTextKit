@@ -27,7 +27,7 @@ extension MetaTextAreaView {
         // a11y
         let elements = content.entities.compactMap { entity -> AccessibilityElement? in
             switch entity.meta {
-            case .url, .hashtag, .mention, .email:
+            case .url, .hashtag, .cashtag, .mention, .email:
                 return AccessibilityElement(accessibilityContainer: self, entity: entity)
             case .emoji:
                 return nil
