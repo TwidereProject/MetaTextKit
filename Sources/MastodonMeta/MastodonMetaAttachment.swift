@@ -88,6 +88,8 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
     public var contentFrame: CGRect = .zero
     public weak var viewProvider: NSTextAttachmentViewProvider?
 
+    private var loadedImageSize: CGSize? = nil
+    
     var imageView: SDAnimatedImageView? {
         return content as? SDAnimatedImageView
     }
@@ -106,6 +108,9 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
     }
     
     func prepareImageView(bounds: CGRect) {
+        guard loadedImageSize != bounds.size else { return }
+        loadedImageSize = bounds.size
+
         imageView?.contentMode = .scaleAspectFit
         imageView?.sd_setImage(with: URL(string: url)) { [weak self] image, error, cacheType, url in
             guard let self = self else { return }
