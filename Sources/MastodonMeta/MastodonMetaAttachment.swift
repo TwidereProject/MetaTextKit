@@ -107,7 +107,7 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func prepareImageView(bounds: CGRect) {
+    func prepareImageView(bounds: CGRect, completionHandler: (() -> Void)?) {
         guard loadedImageSize != bounds.size else { return }
         loadedImageSize = bounds.size
 
@@ -115,13 +115,16 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         imageView?.sd_setImage(with: URL(string: url)) { [weak self] image, error, cacheType, url in
             guard let self = self else { return }
             guard let image = image else { return }
+            completionHandler?()
+            self.image = image
             guard let totalFrameCount = self.imageView?.player?.totalFrameCount, totalFrameCount > 1
             else {
                 // resize transformer not works for APNG
                 // force resize for single frame animated image
                 let scale: CGFloat = 3
                 let size = CGSize(width: ceil(bounds.size.width * scale), height: ceil(bounds.size.height * scale))
-                self.imageView?.image = image.sd_resizedImage(with: size, scaleMode: .aspectFit)
+                let image = image.sd_resizedImage(with: size, scaleMode: .aspectFit)
+                self.imageView?.image = image
                 return
             }
         }
@@ -146,12 +149,7 @@ class MastodonMetaAttachmentTextKit2: MastodonMetaAttachment {
         location: NSTextLocation,
         textContainer: NSTextContainer?
     ) -> UIImage? {
-        contentFrame = bounds
-        
-        prepareImageView(bounds: bounds)
-        
-        let image = super.image(for: bounds, attributes: attributes, location: location, textContainer: textContainer)
-        return image
+        return nil
     }
     
     public override func viewProvider(
@@ -175,9 +173,15 @@ class MastodonMetaAttachmentTextKit1: MastodonMetaAttachment {
     public override func image(forBounds imageBounds: CGRect, textContainer: NSTextContainer?, characterIndex charIndex: Int) -> UIImage? {
         contentFrame = imageBounds
         
-        prepareImageView(bounds: imageBounds)
-        let image = super.image(forBounds: imageBounds, textContainer: textContainer, characterIndex: charIndex)
-        return image
+        prepareImageView(bounds: imageBounds, completionHandler: {
+            textContainer?.layoutManager?.invalidateDisplay(forCharacterRange: NSMakeRange(charIndex, 1))
+        })
+
+        if #available(iOS 16, *) {
+            return nil
+        } else {
+            return self.image
+        }
     }
 }
 
