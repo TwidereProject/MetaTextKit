@@ -15,7 +15,7 @@ public struct PlaintextMetaContent: MetaContent {
         self.string = string
     }
     
-    public func metaAttachment(for entity: Meta.Entity) -> MetaAttachment? {
+    public func metaAttachment(for entity: Meta.Entity, useTextKit2: Bool) -> MetaAttachment? {
         return nil
     }
 }

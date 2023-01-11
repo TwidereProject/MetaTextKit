@@ -98,9 +98,6 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         self.content = content
         super.init(data: nil, ofType: UTType.image.identifier)
 
-        if #available(iOS 16, *) {
-            allowsTextAttachmentView = true
-        }
         image = MastodonMetaAttachment.placeholderImage
     }
     
@@ -108,14 +105,7 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func image(
-        for bounds: CGRect,
-        attributes: [NSAttributedString.Key : Any] = [:],
-        location: NSTextLocation,
-        textContainer: NSTextContainer?
-    ) -> UIImage? {
-        contentFrame = bounds
-
+    func prepareImageView(bounds: CGRect) {
         imageView?.contentMode = .scaleAspectFit
         imageView?.sd_setImage(with: URL(string: url)) { [weak self] image, error, cacheType, url in
             guard let self = self else { return }
@@ -130,6 +120,30 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
                 return
             }
         }
+    }
+}
+
+class MastodonMetaAttachmentTextKit2: MastodonMetaAttachment {
+    override init(string: String, url: String, content: UIView) {
+        super.init(string: string, url: url, content: content)
+        if #available(iOS 16, *) {
+            allowsTextAttachmentView = true
+        }
+    }
+ 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func image(
+        for bounds: CGRect,
+        attributes: [NSAttributedString.Key : Any] = [:],
+        location: NSTextLocation,
+        textContainer: NSTextContainer?
+    ) -> UIImage? {
+        contentFrame = bounds
+        
+        prepareImageView(bounds: bounds)
         
         let image = super.image(for: bounds, attributes: attributes, location: location, textContainer: textContainer)
         return image
@@ -150,6 +164,15 @@ public class MastodonMetaAttachment: NSTextAttachment, MetaAttachment {
         self.viewProvider = viewProvider
         return viewProvider
     }
+}
 
+class MastodonMetaAttachmentTextKit1: MastodonMetaAttachment {
+    public override func image(forBounds imageBounds: CGRect, textContainer: NSTextContainer?, characterIndex charIndex: Int) -> UIImage? {
+        contentFrame = imageBounds
+        
+        prepareImageView(bounds: imageBounds)
+        let image = super.image(forBounds: imageBounds, textContainer: textContainer, characterIndex: charIndex)
+        return image
+    }
 }
 

@@ -11,7 +11,7 @@ public protocol MetaContent {
     var string: String { get }
     var entities: [Meta.Entity] { get }
 
-    func metaAttachment(for entity: Meta.Entity) -> MetaAttachment?
+    func metaAttachment(for entity: Meta.Entity, useTextKit2: Bool) -> MetaAttachment?
 }
 
 extension MetaContent {

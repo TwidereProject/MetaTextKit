@@ -237,12 +237,20 @@ extension MastodonStatusViewController {
                 return style
             }()
             
+            let iOS16: Bool
+            if #available(iOS 16, *) {
+                iOS16 = true
+            } else {
+                iOS16 = false
+            }
+            
             MetaText.setAttributes(
                 for: attributedString,
                    textAttributes: textAttributes,
                    linkAttributes: linkAttributes,
                    paragraphStyle: paragraphStyle,
-                   content: content
+                   content: content,
+                useTextKit2: iOS16
             )
             textView.textStorage.setAttributedString(attributedString)
         } catch {

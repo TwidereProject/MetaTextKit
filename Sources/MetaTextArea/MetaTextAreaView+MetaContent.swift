@@ -19,7 +19,8 @@ extension MetaTextAreaView {
                textAttributes: textAttributes,
                linkAttributes: linkAttributes,
                paragraphStyle: paragraphStyle,
-               content: content
+            content: content,
+            useTextKit2: true
         )
         
         setAttributedString(attributedString)

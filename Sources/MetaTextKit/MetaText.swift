@@ -80,6 +80,13 @@ extension MetaText {
 }
 
 extension MetaText {
+    private var useTextKit2: Bool {
+        if #available(iOS 16, *) {
+            return textView.textLayoutManager != nil
+        } else {
+            return false
+        }
+    }
 
     public func configure(content: MetaContent) {
         let attributedString = NSMutableAttributedString(string: content.string)
@@ -89,7 +96,8 @@ extension MetaText {
             textAttributes: textAttributes,
             linkAttributes: linkAttributes,
             paragraphStyle: paragraphStyle,
-            content: content
+            content: content,
+            useTextKit2: useTextKit2
         )
 
         textView.linkTextAttributes = linkAttributes
@@ -123,7 +131,8 @@ extension MetaText: MetaTextStorageDelegate {
             textAttributes: textAttributes,
             linkAttributes: linkAttributes,
             paragraphStyle: paragraphStyle,
-            content: content
+            content: content,
+            useTextKit2: useTextKit2
         )
         textStorage.endEditing()
 
@@ -139,7 +148,8 @@ extension MetaText {
         textAttributes: [NSAttributedString.Key: Any],
         linkAttributes: [NSAttributedString.Key: Any],
         paragraphStyle: NSMutableParagraphStyle,
-        content: MetaContent
+        content: MetaContent,
+        useTextKit2: Bool
     ) -> [MetaAttachment] {
 
         // clean up
@@ -173,12 +183,12 @@ extension MetaText {
         // attachment
         var replacedAttachments: [MetaAttachment] = []
         for entity in content.entities.reversed() {
-            guard let attachment = content.metaAttachment(for: entity) else { continue }
+            guard let attachment = content.metaAttachment(for: entity, useTextKit2: useTextKit2) else { continue }
             replacedAttachments.append(attachment)
 
             let font = attributedString.attribute(.font, at: entity.range.location, effectiveRange: nil) as? UIFont
             let fontSize = font?.pointSize ?? MetaText.fontSize
-            if #available(iOS 16, *) {
+            if useTextKit2 {
                 attachment.contentFrame = CGRect(
                     origin: .zero,
                     size: CGSize(width: fontSize, height: fontSize)

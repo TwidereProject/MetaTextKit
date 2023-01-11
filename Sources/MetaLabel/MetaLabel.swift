@@ -98,7 +98,8 @@ extension MetaLabel {
             textAttributes: textAttributes,
             linkAttributes: linkAttributes,
             paragraphStyle: paragraphStyle,
-            content: content
+            content: content,
+            useTextKit2: true
         )
         
         textArea.configure(content: content)

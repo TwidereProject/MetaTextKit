@@ -17,7 +17,7 @@ public struct TwitterMetaContent {
 
 extension TwitterMetaContent: MetaContent {
     public var string: String { trimmed }
-    public func metaAttachment(for entity: Meta.Entity) -> MetaAttachment? {
+    public func metaAttachment(for entity: Meta.Entity, useTextKit2: Bool) -> MetaAttachment? {
         return nil
     }
 }
