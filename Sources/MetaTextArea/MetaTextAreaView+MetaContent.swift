@@ -13,14 +13,21 @@ extension MetaTextAreaView {
     
     public func configure(content: MetaContent) {
         let attributedString = NSMutableAttributedString(string: content.string)
-        
+
+        let iOS16: Bool
+        if #available(iOS 16, *) {
+            iOS16 = true
+        } else {
+            iOS16 = false
+        }
+
         MetaText.setAttributes(
             for: attributedString,
                textAttributes: textAttributes,
                linkAttributes: linkAttributes,
                paragraphStyle: paragraphStyle,
             content: content,
-            useTextKit2: true
+            useTextKit2: iOS16
         )
         
         setAttributedString(attributedString)
