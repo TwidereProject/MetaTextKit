@@ -22,9 +22,7 @@ extension Meta {
 extension Meta.Entity {
     public var primaryText: String {
         switch self.meta {
-        case .url(let text, _, _, _):
-            // fix emoji not accepted by AttributedString issue
-            return URLComponents(string: text)?.url?.absoluteString ?? text
+        case .url(_, _, let url, _):            return url
         case .emoji(let text, _, _, _):         return text
         case .hashtag(let text, _, _):          return text
         case .cashtag(let text, _, _):          return text

@@ -34,9 +34,12 @@ extension TwitterMetaContent {
                         return text.trim(to: urlMaximumLength)
                     }
                 }()
+                // fix emoji not accepted by AttributedString issue
+                // fix the iOS 15 URLComponents not accept emoji issue
+                let url = URLComponents(string: text.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) ?? text)?.url?.absoluteString ?? text
                 let entity = Meta.Entity(
                     range: range,
-                    meta: .url(text, trimmed: trimmed, url: text, userInfo: nil)
+                    meta: .url(text, trimmed: trimmed, url: url, userInfo: nil)
                 )
                 entities.append(entity)
             case .screenName:
