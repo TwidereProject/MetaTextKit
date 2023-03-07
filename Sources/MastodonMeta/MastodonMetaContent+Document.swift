@@ -35,7 +35,7 @@ extension MastodonMetaContent {
                 let text = String(node.text)
                 let trimmed: String = {
                     if let hrefEllipsis = node.hrefEllipsis {
-                        return hrefEllipsis + "..."
+                        return hrefEllipsis + "…"
                     } else {
                         return text
                     }
