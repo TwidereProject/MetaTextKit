@@ -11,7 +11,10 @@ import Fuzi
 
 extension MastodonMetaContent {
 
-    public static func convert(document content: MastodonContent) throws -> MastodonMetaContent {
+    public static func convert(
+        document content: MastodonContent,
+        useParagraphMark: Bool = false
+    ) throws -> MastodonMetaContent {
         let document: String = {
             var document = content.content
             for (shortcode, url) in content.emojis {
@@ -21,7 +24,7 @@ extension MastodonMetaContent {
             }
             return document.trimmingCharacters(in: .whitespacesAndNewlines)
         }()
-        let rootNode = try Node.parse(document: document)
+        let rootNode = try Node.parse(document: document, useParagraphMark: useParagraphMark)
         let text = String(rootNode.text)
 
         var metaEntities: [Meta.Entity] = []

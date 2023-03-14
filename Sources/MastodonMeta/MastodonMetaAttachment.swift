@@ -51,7 +51,7 @@ public class MastodonMetaAttachmentView: UIView {
     
     public override var frame: CGRect {
         didSet {
-            print(frame)
+            // print(frame)
         }
     }
     

@@ -13,9 +13,10 @@ extension TwitterMetaContent {
     public static func convert(
         content: TwitterContent,
         urlMaximumLength: Int,
-        twitterTextProvider: TwitterTextProvider
+        twitterTextProvider: TwitterTextProvider,
+        useParagraphMark: Bool = false
     ) -> TwitterMetaContent {
-        let original = content.content
+        let original = useParagraphMark ? content.content.replacingOccurrences(of: "\n+", with: "\u{2029}", options: .regularExpression) : content.content 
         var entities: [Meta.Entity] = []
         let twitterTextEntities = twitterTextProvider.entities(in: original)
             .sorted(by: { $0.range.location < $1.range.location })
