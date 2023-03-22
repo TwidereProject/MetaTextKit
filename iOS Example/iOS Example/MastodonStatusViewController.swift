@@ -23,6 +23,8 @@ class MastodonStatusViewController: UIViewController {
         return metaText
     }()
     let metaLabel = MetaLabel()
+    let label = UILabel()
+    
     let metaText = MetaText()
     let textArea = MetaTextAreaView()
     let textView = UITextView()
@@ -108,11 +110,22 @@ class MastodonStatusViewController: UIViewController {
         label2.text = "@username"
         lineContainer2.addArrangedSubview(label2)
         label2.setContentCompressionResistancePriority(.required - 1, for: .horizontal)
+        
+        let lineContainer3 = UIStackView()
+        lineContainer3.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(lineContainer3)
+        NSLayoutConstraint.activate([
+            lineContainer3.topAnchor.constraint(equalTo: lineContainer2.bottomAnchor),
+            lineContainer3.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            lineContainer3.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        
+        lineContainer3.addArrangedSubview(label)
 
         metaText.textView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(metaText.textView)
         NSLayoutConstraint.activate([
-            metaText.textView.topAnchor.constraint(equalTo: lineContainer2.bottomAnchor),
+            metaText.textView.topAnchor.constraint(equalTo: lineContainer3.bottomAnchor),
             metaText.textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             metaText.textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
@@ -141,18 +154,20 @@ class MastodonStatusViewController: UIViewController {
 
         metaText.delegate = self
 
+//        setupsingleLineMetaTextContent()
+//        setupMetaLabelContent()
         setupLabelContent()
-        setupMetaLabelContent()
-        setupTextEditorContent()
-        setupTextAreaContext()
-        setupTextViewContext()
+        
+//        setupTextEditorContent()
+//        setupTextAreaContext()
+//        setupTextViewContext()
     }
 
 }
 
 extension MastodonStatusViewController {
 
-    func setupLabelContent() {
+    func setupsingleLineMetaTextContent() {
         let content = (0..<100)
             .compactMap { _ in ":" + emojis.keys.randomElement()! + ":" }
             .joined(separator: " ")
@@ -177,6 +192,44 @@ extension MastodonStatusViewController {
                 document: MastodonContent(content: "MetaLabel (TextKit 2)" + content, emojis: emojis)
             )
             metaLabel.configure(content: metaContent)
+        } catch {
+            assertionFailure()
+        }
+    }
+    
+    func setupLabelContent() {
+        let content = (0..<4)
+            .compactMap { _ in ":" + emojis.keys.randomElement()! + ":" }
+            .joined(separator: " ")
+
+        do {
+            let metaContent = try MastodonMetaContent.convert(
+                document: MastodonContent(content: "UILabel (TextKit 2)" + content, emojis: emojis)
+            )
+            let attributedString = NSMutableAttributedString(string: metaContent.string)
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFontMetrics(forTextStyle: .body).scaledFont(for: .systemFont(ofSize: 17, weight: .regular)),
+                .foregroundColor: UIColor.label,
+            ]
+            let linkAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFontMetrics(forTextStyle: .body).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold)),
+                .foregroundColor: UIColor.link,
+            ]
+            let paragraphStyle: NSMutableParagraphStyle = {
+                let style = NSMutableParagraphStyle()
+                style.lineSpacing = 5
+                style.paragraphSpacing = 8
+                return style
+            }()
+            
+            MetaText.setAttributes(
+                for: attributedString,
+                   textAttributes: textAttributes,
+                   linkAttributes: linkAttributes,
+                   paragraphStyle: paragraphStyle,
+                   content: metaContent
+            )
+            label.attributedText = attributedString
         } catch {
             assertionFailure()
         }
