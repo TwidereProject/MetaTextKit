@@ -14,7 +14,8 @@ extension TwitterMetaContent {
         content: TwitterContent,
         urlMaximumLength: Int,
         twitterTextProvider: TwitterTextProvider,
-        useParagraphMark: Bool = false
+        useParagraphMark: Bool = false,
+        trimHTTPPrefix: Bool = true         // fix compose content highlight render issue
     ) -> TwitterMetaContent {
         let original = useParagraphMark ? content.content.replacingOccurrences(of: "\n+", with: "\u{2029}", options: .regularExpression) : content.content 
         var entities: [Meta.Entity] = []
@@ -27,9 +28,9 @@ extension TwitterMetaContent {
             switch twitterTextEntity {
             case .url:
                 let trimmed: String = {
-                    if text.lowercased().hasPrefix("https://") {
+                    if trimHTTPPrefix, text.lowercased().hasPrefix("https://") {
                         return String(text.dropFirst("https://".count)).trim(to: urlMaximumLength)
-                    } else if text.lowercased().hasPrefix("http://") {
+                    } else if trimHTTPPrefix, text.lowercased().hasPrefix("http://") {
                         return String(text.dropFirst("http://".count)).trim(to: urlMaximumLength)
                     } else {
                         return text.trim(to: urlMaximumLength)
