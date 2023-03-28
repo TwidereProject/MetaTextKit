@@ -45,8 +45,14 @@ class MetaTextLayoutFragmentLayer: CALayer {
     override func draw(in ctx: CGContext) {
         guard let textLayoutFragment = textLayoutFragment else { return }
         
+        let isRTL = contentView?.traitCollection.layoutDirection == .rightToLeft
+        
         // draw text
-        textLayoutFragment.draw(at: .zero, in: ctx)
+        let layoutFragmentFrameOffsetX = -textLayoutFragment.layoutFragmentFrame.origin.x
+        textLayoutFragment.draw(
+            at: CGPoint(x: layoutFragmentFrameOffsetX, y: 0),
+            in: ctx
+        )
         
         // add attachment
         for textLineFragment in textLayoutFragment.textLineFragments {
@@ -111,13 +117,14 @@ class MetaTextLayoutFragmentLayer: CALayer {
             ctx.setStrokeColor(MetaTextLayoutFragmentLayer.typographicBoundsStrokeColor.cgColor)
             ctx.setLineDash(phase: 0, lengths: [strokeWidth, strokeWidth]) // square dashes.
             var typographicBounds = textLayoutFragment.layoutFragmentFrame
-            typographicBounds.origin = .zero
+            typographicBounds.origin = .zero            // fix position
             ctx.stroke(typographicBounds.insetBy(dx: inset, dy: inset))
             
             // draw bounds for lines
             for textLineFragment in textLayoutFragment.textLineFragments {                
                 // draw typographic bounds for line
-                let lineTypographicBounds = textLineFragment.typographicBounds
+                var lineTypographicBounds = textLineFragment.typographicBounds
+                lineTypographicBounds.origin.x = isRTL ? typographicBounds.maxX - lineTypographicBounds.width : .zero
                 ctx.setStrokeColor(MetaTextLayoutFragmentLayer.lineTypographicBoundsStrokeColor.cgColor)
                 ctx.setLineDash(phase: 0, lengths: [strokeWidth, strokeWidth]) // square dashes.
                 ctx.stroke(lineTypographicBounds.insetBy(dx: inset, dy: inset))
@@ -129,7 +136,7 @@ class MetaTextLayoutFragmentLayer: CALayer {
                     let characterOrigin = textLineFragment.locationForCharacter(at: characterLocation)
                     ctx.saveGState()
                     let rect = CGRect(
-                        x: characterOrigin.x,
+                        x: characterOrigin.x + layoutFragmentFrameOffsetX,  // fix position
                         y: lineTypographicBounds.minY,
                         width: 1,
                         height: lineTypographicBounds.height
