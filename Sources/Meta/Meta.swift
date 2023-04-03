@@ -44,7 +44,8 @@ extension Meta {
         guard let range = Range(entity.range, in: content) else { return }
         content.replaceSubrange(range, with: trimmed)
 
-        let offset = trimmed.count - text.count
+        // workaround emoji count differnt in Swift issue
+        let offset = (trimmed as NSString).length - (text as NSString).length
         entity.range.length += offset
 
         let moveEntities = Array(entities[index...].dropFirst())

@@ -59,7 +59,7 @@ public class MetaLabel: UIView {
         textArea.textContainer.lineFragmentPadding = 0
         textArea.delegate = self
         
-        textArea.layer.masksToBounds = true
+        // textArea.layer.masksToBounds = true
     }
 
     required init?(coder: NSCoder) {

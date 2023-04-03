@@ -1,8 +1,8 @@
 //
-//  TwitterMetaContent+Text.swift
-//  iOS Example
+//  TwitterMetaContent+Document.swift
+//  
 //
-//  Created by MainasuK Cirno on 2021-7-13.
+//  Created by MainasuK on 2023/4/3.
 //
 
 import Foundation
@@ -11,12 +11,12 @@ import Meta
 extension TwitterMetaContent {
 
     public static func convert(
-        text content: TwitterContent,
+        document content: TwitterContent,
         urlMaximumLength: Int,
         twitterTextProvider: TwitterTextProvider,
         useParagraphMark: Bool = false
     ) -> TwitterMetaContent {
-        let original = useParagraphMark ? content.content.replacingOccurrences(of: "\n+", with: "\u{2029}", options: .regularExpression) : content.content 
+        let original = useParagraphMark ? content.content.replacingOccurrences(of: "\n+", with: "\u{2029}", options: .regularExpression) : content.content
         var entities: [Meta.Entity] = []
         let twitterTextEntities = twitterTextProvider.entities(in: original)
             .sorted(by: { $0.range.location < $1.range.location })
@@ -26,13 +26,25 @@ extension TwitterMetaContent {
             guard let text = original.string(in: range) else { continue }
             switch twitterTextEntity {
             case .url:
-                let trimmed = text.trim(to: urlMaximumLength)
-                // fix emoji not accepted by AttributedString issue
-                // fix the iOS 15 URLComponents not accept emoji issue
-                let url = URLComponents(string: text.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) ?? text)?.url?.absoluteString ?? text
+                guard let urlEntity = content.urlEntities.first(where: { $0.url == text }),
+                      let displayURL = urlEntity.displayURL,
+                      let expandedURL = urlEntity.expandedURL
+                else {
+                    let entity = Meta.Entity(
+                        range: range,
+                        meta: .url(text, trimmed: text.dropHTTPPrefix().trim(to: urlMaximumLength), url: text, userInfo: nil)
+                    )
+                    entities.append(entity)
+                    continue
+                }
+                let trimmed = displayURL
+                let url = expandedURL
+                let userInfo: [AnyHashable: Any] = [
+                    "urlEntity": urlEntity
+                ]
                 let entity = Meta.Entity(
                     range: range,
-                    meta: .url(text, trimmed: trimmed, url: url, userInfo: nil)
+                    meta: .url(text, trimmed: trimmed, url: url, userInfo: userInfo)
                 )
                 entities.append(entity)
             case .screenName:
@@ -90,5 +102,15 @@ fileprivate extension String {
             return self
         }
         return "\(self[..<index(startIndex, offsetBy: maximumCharacters)])" + "..."
+    }
+    
+    func dropHTTPPrefix() -> String {
+        if self.lowercased().hasPrefix("https://") {
+            return String(self.dropFirst("https://".count))
+        } else if self.lowercased().hasPrefix("http://") {
+            return String(self.dropFirst("http://".count))
+        } else {
+            return self
+        }
     }
 }

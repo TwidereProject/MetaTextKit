@@ -47,6 +47,9 @@ class MetaTextLayoutFragmentLayer: CALayer {
         
         let isRTL = contentView?.traitCollection.layoutDirection == .rightToLeft
         
+        ctx.setFillColor(UIColor.red.cgColor)
+        ctx.fill([CGRect(x: -9999, y: -9999, width: 99999, height: 99999)])
+        
         // draw text
         let layoutFragmentFrameOffsetX = -textLayoutFragment.layoutFragmentFrame.origin.x
         textLayoutFragment.draw(

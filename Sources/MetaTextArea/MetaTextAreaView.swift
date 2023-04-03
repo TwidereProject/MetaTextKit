@@ -16,6 +16,8 @@ public protocol MetaTextAreaViewDelegate: AnyObject {
 
 public class MetaTextAreaView: UIView {
     
+    var disposeBag = Set<AnyCancellable>()
+    
     // let logger = Logger(subsystem: "MetaTextAreaView", category: "Layout")
     let logger = Logger(OSLog.disabled)
          
@@ -85,6 +87,25 @@ public class MetaTextAreaView: UIView {
         tapGestureRecognizer.delaysTouchesBegan = false
         
         accessibilityContainerType = .semanticGroup
+        
+        Timer.publish(every: 1.0, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                print("container: \(self.textContainer.size.debugDescription), frame: \(self.frame)")
+                
+                if self.textContainer.size.height >= 10000000 {
+                    self.invalidateIntrinsicContentSize()
+                    _ = self.intrinsicContentSize
+                } else {
+                    _ = self.intrinsicContentSize
+                }
+                
+                if self.frame != .zero {
+                    self.textLayoutManager.textViewportLayoutController.layoutViewport()
+                }
+            }
+            .store(in: &disposeBag)
     }
     
     public override func layoutSubviews() {
@@ -105,15 +126,22 @@ public class MetaTextAreaView: UIView {
         }()
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
         let _intrinsicContentSize = sizeThatFits(size)
+        if frame == .zero {
+            self.frame.size = _intrinsicContentSize
+            self.textContainer.size = _intrinsicContentSize
+            self.textLayoutManager.textViewportLayoutController.layoutViewport()
+        }
         return _intrinsicContentSize
     }
     
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         // update textContainer width
         if textContainer.maximumNumberOfLines == 1 {
-            textContainer.size.width = CGFloat.greatestFiniteMagnitude
+            textContainer.size.width = UIScreen.main.bounds.width
+            textContainer.size.height = .zero
         } else {
             textContainer.size.width = size.width
+            textContainer.size.height = .zero
         }
         
         // needs always draw to fit tableView/collectionView cell reusing
@@ -136,6 +164,13 @@ public class MetaTextAreaView: UIView {
         logger.log(level: .debug, "\((#file as NSString).lastPathComponent, privacy: .public)[\(#line, privacy: .public)], \(#function, privacy: .public): \(newSize.debugDescription)")
         
         return newSize
+    }
+    
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // trigger sizeThatFits()
+        self.invalidateIntrinsicContentSize()
     }
     
     deinit {
@@ -208,10 +243,11 @@ extension MetaTextAreaView: NSTextViewportLayoutControllerDelegate {
     
     public func viewportBounds(for textViewportLayoutController: NSTextViewportLayoutController) -> CGRect {
         logger.log(level: .debug, "\((#file as NSString).lastPathComponent, privacy: .public)[\(#line, privacy: .public)], \(#function, privacy: .public): return viewportBounds: \(self.bounds.debugDescription)")
-        return CGRect(
-            origin: .zero,
-            size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-        )
+        return bounds
+//        return CGRect(
+//            origin: .zero,
+//            size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+//        )
     }
     
     public func textViewportLayoutControllerWillLayout(_ textViewportLayoutController: NSTextViewportLayoutController) {
@@ -241,8 +277,8 @@ extension MetaTextAreaView: NSTextViewportLayoutControllerDelegate {
         contentLayer.addSublayer(textLayoutFragmentLayer)
 
         if !isCreate {
-            textLayoutFragmentLayer.updateGeometry()
         }
+        textLayoutFragmentLayer.updateGeometry()
         // always redraw when layout to meet preferred content size and Dark/Light Mode changing
         textLayoutFragmentLayer.setNeedsDisplay()
         
@@ -252,6 +288,8 @@ extension MetaTextAreaView: NSTextViewportLayoutControllerDelegate {
             textLayoutFragmentLayer.setNeedsDisplay()
         }
         #endif
+        
+        textLayoutFragmentLayer.displayIfNeeded()
     }
     
     public func textViewportLayoutControllerDidLayout(_ textViewportLayoutController: NSTextViewportLayoutController) {
