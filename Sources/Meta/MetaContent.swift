@@ -22,7 +22,7 @@ extension MetaContent {
         let stringRange = NSRange(location: 0, length: attributedString.length)
         for entity in entities {
             let range = NSIntersectionRange(stringRange, entity.range)
-            attributedString.addAttribute(.link, value: entity.primaryText, range: range)
+            attributedString.addAttribute(.link, value: entity.encodedPrimaryText, range: range)
             attributedString.addAttribute(.foregroundColor, value: accentColor, range: range)
         }
 

@@ -30,6 +30,10 @@ extension Meta.Entity {
         case .email(let text, _):               return text
         }
     }
+    
+    public var encodedPrimaryText: String {
+        return primaryText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? primaryText
+    }
 }
 
 extension Meta.Entity: CustomDebugStringConvertible {
