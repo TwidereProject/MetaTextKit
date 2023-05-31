@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -24,6 +24,7 @@ let package = Package(
         .package(url: "https://github.com/cezheng/Fuzi.git", from: "3.1.0"),
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.5.0"),
         .package(url: "https://github.com/SDWebImage/SDWebImage.git", from: "5.12.0"),
+        .package(url: "https://github.com/TwidereProject/twitter-text.git", exact: "0.0.4"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -48,7 +49,10 @@ let package = Package(
         ),
         .target(
             name: "TwitterMeta",
-            dependencies: ["Meta"]
+            dependencies: [
+                "Meta",
+                .product(name: "TwitterText", package: "twitter-text"),
+            ]
         ),
         .target(
             name: "Meta"
@@ -59,6 +63,10 @@ let package = Package(
             resources: [
                 .process("Resources")
             ]
+        ),
+        .testTarget(
+            name: "TwitterMetaTests",
+            dependencies: ["TwitterMeta"]
         ),
     ]
 )

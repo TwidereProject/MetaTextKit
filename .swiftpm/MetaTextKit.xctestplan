@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "686F9FA8-5BB8-4917-A986-88BF8C8838E0",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MastodonMetaTests",
+        "name" : "MastodonMetaTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "TwitterMetaTests",
+        "name" : "TwitterMetaTests"
+      }
+    }
+  ],
+  "version" : 1
+}

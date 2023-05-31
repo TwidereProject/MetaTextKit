@@ -27,14 +27,11 @@ extension Meta {
     }
 
     static func trim(content: inout String, entity: Meta.Entity, entities: [Meta.Entity]) {
-        let text: String
         let trimmed: String
         switch entity.meta {
-        case .url(let _text, let _trimmed, _, _):
-            text = _text
+        case .url(_, let _trimmed, _, _):
             trimmed = _trimmed
-        case .emoji(let _text, _, _, _):
-            text = _text
+        case .emoji:
             trimmed = " "
         default:
             return
@@ -45,7 +42,7 @@ extension Meta {
         content.replaceSubrange(range, with: trimmed)
 
         // workaround emoji count differnt in Swift issue
-        let offset = (trimmed as NSString).length - (text as NSString).length
+        let offset = (trimmed as NSString).length - entity.range.length
         entity.range.length += offset
 
         let moveEntities = Array(entities[index...].dropFirst())
