@@ -124,7 +124,7 @@ extension MastodonStatusViewController {
     
     func setupStatusContent() {
         let content = """
-        <p>:sabakan: <a href=\"https://mastodon.social/tags/Mastodon\" class=\"mention hashtag\" rel=\"nofollow noopener noreferrer\" target=\"_blank\">#<span>Mastodon</span></a> 3.5.3 has just been released with multiple security fixes, as well as a couple cool improvements!</p><p><a href=\"https://github.com/mastodon/mastodon/releases/tag/v3.5.3\" rel=\"nofollow noopener noreferrer\" target=\"_blank\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">github.com/mastodon/mastodon/r</span><span class=\"invisible\">eleases/tag/v3.5.3</span></a></p><p>A 3.4.8 backport is available for those who haven\'t made the jump to 3.5 yet.</p>
+        <p>:sabakan: <a href=\"https://mastodon.social/tags/Mastodon\" class=\"mention hashtag\" rel=\"nofollow noopener noreferrer\" target=\"_blank\">#<span>Mastodon</span></a> 3.5.3 has just been <em>released</em> with multiple <strong>security</strong> fixes, as well <strong>as a <em>couple</em> cool</strong> improvements!</p><p><a href=\"https://github.com/mastodon/mastodon/releases/tag/v3.5.3\" rel=\"nofollow noopener noreferrer\" target=\"_blank\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">github.com/mastodon/mastodon/r</span><span class=\"invisible\">eleases/tag/v3.5.3</span></a></p><p>A 3.4.8 <code>backport</code>= is available <u>for</u> those who haven\'t made the <del>jump</del> to 3.5 yet.</p><pre><code>function helloWorld() {\n  console.log("Hello, world!");\n}</code></pre>
         """
         do {
             let metaContent = try MastodonMetaContent.convert(
