@@ -13,9 +13,18 @@ public enum Meta {
     case mention(_ text: String, mention: String, userInfo: [AnyHashable: Any]? = nil)
     case email(_ text: String, userInfo: [AnyHashable: Any]? = nil)
     case emoji(_ text: String, shortcode: String, url: String, userInfo: [AnyHashable: Any]? = nil)
+    case formatted(_ text: String, FormatType)
 }
 
 extension Meta {
+    
+    public enum FormatType {
+        case strong // e.g. bold
+        case emphasized // e.g. italic
+        case underlined
+        case strikethrough
+        case code
+    }
 
     public static func trim(content: String, orderedEntities: [Meta.Entity]) -> String {
         var content = content

@@ -23,10 +23,11 @@ extension Meta.Entity {
     public var primaryText: String {
         switch self.meta {
         case .url(let text, _, _, _):      return text
-        case .emoji(let text, _, _, _):       return text
-        case .hashtag(let text, _, _):        return text
-        case .mention(let text, _, _):        return text
+        case .emoji(let text, _, _, _):    return text
+        case .hashtag(let text, _, _):     return text
+        case .mention(let text, _, _):     return text
         case .email(let text, _):          return text
+        case .formatted(let text, _):      return text
         }
     }
 }

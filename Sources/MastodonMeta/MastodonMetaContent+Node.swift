@@ -44,7 +44,8 @@ extension MastodonMetaContent {
                 return Set(className.components(separatedBy: " "))
             }()
             let _type: Type? = {
-                if tagName == "a" {
+                switch tagName {
+                case "a":
                     if _classNames.contains("u-url") {
                         return .mention
                     }
@@ -52,7 +53,17 @@ extension MastodonMetaContent {
                         return .hashtag
                     }
                     return .url
-                } else {
+                case "b", "strong":
+                    return .formatted(.strong)
+                case "i", "em":
+                    return .formatted(.emphasized)
+                case "u":
+                    return .formatted(.underlined)
+                case "del":
+                    return .formatted(.strikethrough)
+                case "pre", "code":
+                    return .formatted(.code)
+                default:
                     if _classNames.contains("emoji") {
                         return .emoji
                     }
@@ -159,11 +170,25 @@ extension MastodonMetaContent {
 }
 
 extension MastodonMetaContent.Node {
-    enum `Type` {
+    enum `Type`: Equatable {
         case url
         case mention
         case hashtag
         case emoji
+        case formatted(FormatType)
+    }
+
+    enum FormatType: Equatable {
+        // b, strong
+        case strong
+        // i, em
+        case emphasized
+        // u
+        case underlined
+        // del
+        case strikethrough
+        // pre, code
+        case code
     }
 
     static func entities(in node: MastodonMetaContent.Node) -> [MastodonMetaContent.Node] {
