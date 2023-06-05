@@ -164,6 +164,10 @@ extension MetaText {
             range: NSRange(location: 0, length: attributedString.length)
         )
 
+
+        // paragraph
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
+
         // meta
         let stringRange = NSRange(location: 0, length: attributedString.length)
         for entity in content.entities {
@@ -203,6 +207,10 @@ extension MetaText {
                     if let monospaced = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitMonoSpace)) {
                         attributedString.addAttribute(.font, value: UIFont(descriptor: monospaced, size: font.pointSize), range: entity.range)
                     }
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    paragraphStyle.lineHeightMultiple = 1
+                    paragraphStyle.lineSpacing = 0
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
                 }
             }
         }
@@ -223,12 +231,9 @@ extension MetaText {
 
             // inject attachment via replace string at entity range
             attributedString.replaceCharacters(in: entity.range, with: NSAttributedString(attachment: attachment))
+            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
         }
         allRange = NSRange(location: 0, length: attributedString.length)
-
-        // paragraph
-        // set after attachment to prevent paragraphStyle be replaced (e.g. attachment at the head of paragraph)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
 
         return replacedAttachments
     }
