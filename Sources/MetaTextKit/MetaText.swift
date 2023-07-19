@@ -164,15 +164,55 @@ extension MetaText {
             range: NSRange(location: 0, length: attributedString.length)
         )
 
+
+        // paragraph
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
+
         // meta
         let stringRange = NSRange(location: 0, length: attributedString.length)
         for entity in content.entities {
-            var linkAttributes = linkAttributes
-            linkAttributes[.meta] = entity.meta
-            // FIXME: the emoji make cause wrong entity range out of bounds
-            // workaround: use intersection range temporary
-            let range = NSIntersectionRange(stringRange, entity.range)
-            attributedString.addAttributes(linkAttributes, range: range)
+            switch entity.meta {
+            case .url, .hashtag, .mention, .email, .emoji:
+                var linkAttributes = linkAttributes
+                linkAttributes[.meta] = entity.meta
+                // FIXME: the emoji make cause wrong entity range out of bounds
+                // workaround: use intersection range temporary
+                let range = NSIntersectionRange(stringRange, entity.range)
+                attributedString.addAttributes(linkAttributes, range: range)
+            case .formatted(_, let type):
+                attributedString.addAttribute(.meta, value: entity.meta, range: entity.range)
+                guard let font = attributedString.attribute(.font, at: entity.range.location, effectiveRange: nil) as? UIFont
+                else { continue }
+                let descriptor = font.fontDescriptor
+                switch type {
+                case .strong:
+                    if let bold = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitBold)) {
+                        attributedString.addAttribute(.font, value: UIFont(descriptor: bold, size: font.pointSize), range: entity.range)
+                    }
+                case .emphasized:
+                    if let italic = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitItalic)) {
+                        attributedString.addAttribute(.font, value: UIFont(descriptor: italic, size: font.pointSize), range: entity.range)
+                    }
+                case .underlined:
+                    attributedString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: entity.range)
+                    if let underlineColor = textAttributes[.foregroundColor] as? UIColor {
+                        attributedString.addAttribute(.underlineColor, value: underlineColor, range: entity.range)
+                    }
+                case .strikethrough:
+                    attributedString.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: entity.range)
+                    if let strikethroughColor = textAttributes[.foregroundColor] as? UIColor {
+                        attributedString.addAttribute(.strikethroughColor, value: strikethroughColor, range: entity.range)
+                    }
+                case .code:
+                    if let monospaced = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitMonoSpace)) {
+                        attributedString.addAttribute(.font, value: UIFont(descriptor: monospaced, size: font.pointSize), range: entity.range)
+                    }
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    paragraphStyle.lineHeightMultiple = 1
+                    paragraphStyle.lineSpacing = 0
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                }
+            }
         }
 
         // attachment
@@ -191,12 +231,9 @@ extension MetaText {
 
             // inject attachment via replace string at entity range
             attributedString.replaceCharacters(in: entity.range, with: NSAttributedString(attachment: attachment))
+            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
         }
         allRange = NSRange(location: 0, length: attributedString.length)
-
-        // paragraph
-        // set after attachment to prevent paragraphStyle be replaced (e.g. attachment at the head of paragraph)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
 
         return replacedAttachments
     }
