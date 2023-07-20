@@ -9,6 +9,7 @@ import UIKit
 
 final class TabBarController: UITabBarController {
  
+    let previewViewController = PreviewViewController()
     let mastodonStatusViewController = MastodonStatusViewController()
     let twitterStatusViewController = TwitterStatusViewController()
     
@@ -16,9 +17,13 @@ final class TabBarController: UITabBarController {
         super.viewDidLoad()
         
         let viewControllers: [UIViewController] = [
+            UINavigationController(rootViewController: previewViewController),
             UINavigationController(rootViewController: mastodonStatusViewController),
             UINavigationController(rootViewController: twitterStatusViewController)
         ]
+        previewViewController.title = "Preview"
+        mastodonStatusViewController.title = "Mastodon"
+        twitterStatusViewController.title = "Twitter"
         setViewControllers(viewControllers, animated: false)
     }
     

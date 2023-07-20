@@ -63,7 +63,7 @@ public class MetaText: NSObject {
 
 extension MetaText {
 
-    open var backedString: String {
+    public var backedString: String {
         let string = textStorage.string
         let nsString = NSMutableString(string: string)
         textStorage.enumerateAttribute(
@@ -110,7 +110,7 @@ extension MetaText {
 
 // MARK: - MetaTextStorageDelegate
 extension MetaText: MetaTextStorageDelegate {
-    open func processEditing(_ textStorage: MetaTextStorage) -> MetaContent? {
+    public func processEditing(_ textStorage: MetaTextStorage) -> MetaContent? {
         // note: check the attachment content view needs remove or not
         // "Select All" then delete text not call the `drawGlyphs` methold
         if textStorage.length == 0 {
