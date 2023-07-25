@@ -34,6 +34,6 @@ extension Meta.Entity {
 
 extension Meta.Entity: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "{\(range.debugDescription), \(primaryText)"
+        return "\n[\(range.debugDescription)]: \(String(describing: meta))"
     }
 }

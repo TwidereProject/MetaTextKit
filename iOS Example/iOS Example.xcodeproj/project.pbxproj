@@ -15,6 +15,7 @@
 		DB1A04BA2A692A3F00B65ECA /* ViewLayoutFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04B92A692A3F00B65ECA /* ViewLayoutFrame.swift */; };
 		DB1A04BC2A693C6C00B65ECA /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04BB2A693C6C00B65ECA /* PreviewViewController.swift */; };
 		DB1A04BE2A693CFC00B65ECA /* PreviewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04BD2A693CFC00B65ECA /* PreviewContainer.swift */; };
+		DB1A04C62A6FAFD200B65ECA /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = DB1A04C52A6FAFD200B65ECA /* SwiftUIIntrospect */; };
 		DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB585015269D6312006CB091 /* TwitterStatusViewController.swift */; };
 		DB77FF6A2842B57B00182A0B /* MetaTextKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB77FF692842B57B00182A0B /* MetaTextKit */; };
 		DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB837010266E1730005CE2A1 /* AppDelegate.swift */; };
@@ -38,6 +39,7 @@
 		DB1A04B92A692A3F00B65ECA /* ViewLayoutFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLayoutFrame.swift; sourceTree = "<group>"; };
 		DB1A04BB2A693C6C00B65ECA /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		DB1A04BD2A693CFC00B65ECA /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
+		DB1A04C82A6FDD2400B65ECA /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = TestPlan.xctestplan; path = "/Users/mainasuk/Developer/Swift/MetaTextKit/iOS Example/iOS Example/TestPlan.xctestplan"; sourceTree = "<absolute>"; };
 		DB585015269D6312006CB091 /* TwitterStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterStatusViewController.swift; sourceTree = "<group>"; };
 		DB83700D266E1730005CE2A1 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB837010266E1730005CE2A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB1A04C62A6FAFD200B65ECA /* SwiftUIIntrospect in Frameworks */,
 				F8B964941D76B076507665B1 /* Pods_iOS_Example.framework in Frameworks */,
 				DB77FF6A2842B57B00182A0B /* MetaTextKit in Frameworks */,
 			);
@@ -126,6 +129,7 @@
 		DB83700F266E1730005CE2A1 /* iOS Example */ = {
 			isa = PBXGroup;
 			children = (
+				DB1A04C82A6FDD2400B65ECA /* TestPlan.xctestplan */,
 				DB1A04B82A692A2600B65ECA /* Vendor */,
 				DB1A04AD2A690C6C00B65ECA /* Preview */,
 				DB837010266E1730005CE2A1 /* AppDelegate.swift */,
@@ -169,6 +173,7 @@
 			name = "iOS Example";
 			packageProductDependencies = (
 				DB77FF692842B57B00182A0B /* MetaTextKit */,
+				DB1A04C52A6FAFD200B65ECA /* SwiftUIIntrospect */,
 			);
 			productName = "iOS Example";
 			productReference = DB83700D266E1730005CE2A1 /* iOS Example.app */;
@@ -197,6 +202,9 @@
 				Base,
 			);
 			mainGroup = DB837004266E1730005CE2A1;
+			packageReferences = (
+				DB1A04C42A6FAFD200B65ECA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+			);
 			productRefGroup = DB83700E266E1730005CE2A1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -483,7 +491,23 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		DB1A04C42A6FAFD200B65ECA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		DB1A04C52A6FAFD200B65ECA /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB1A04C42A6FAFD200B65ECA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = SwiftUIIntrospect;
+		};
 		DB77FF692842B57B00182A0B /* MetaTextKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaTextKit;

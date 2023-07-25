@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MastodonMetaContent+Node.swift
 //  
 //
 //  Created by Cirno MainasuK on 2021-6-25.
@@ -12,7 +12,10 @@ extension MastodonMetaContent {
 
     class Node {
 
-        let level: Int
+        let level: Int          // tag depth
+        let indentLevel: Int    // list depth
+        
+        // HTML tag type
         let type: Type?
 
         // substring text
@@ -32,6 +35,7 @@ extension MastodonMetaContent {
 
         init(
             level: Int,
+            indentLevel: Int,
             text: Substring,
             tagName: String?,
             attributes: [String : String],
@@ -63,6 +67,12 @@ extension MastodonMetaContent {
                     return .formatted(.strikethrough)
                 case "pre", "code":
                     return .formatted(.code)
+                case "ol":
+                    return .formatted(.orderedList)
+                case "ul":
+                    return .formatted(.unorderedList)
+                case "li":
+                    return .formatted(.listItem(indentLevel: indentLevel))
                 default:
                     if _classNames.contains("emoji") {
                         return .emoji
@@ -71,6 +81,7 @@ extension MastodonMetaContent {
                 }
             }()
             self.level = level
+            self.indentLevel = indentLevel
             self.type = _type
             self.text = text
             self.tagName = tagName
@@ -82,19 +93,37 @@ extension MastodonMetaContent {
 
         static func parse(document: String) throws -> MastodonMetaContent.Node {
             let document = document
+                .replacingOccurrences(of: "<h1>|<h2>|<h3>|<h4>|<h5>|<h6>", with: "<p><strong>", options: .regularExpression, range: nil)
+                .replacingOccurrences(of: "</h1>|</h2>|</h3>|</h4>|</h5>|</h6>", with: "</strong></p>", options: .regularExpression, range: nil)
                 .replacingOccurrences(of: "<br>|<br />", with: "\u{2028}", options: .regularExpression, range: nil)
+//                .replacingOccurrences(of: "<ol>", with: "<ol>\u{2029}", options: .regularExpression, range: nil)
+//                .replacingOccurrences(of: "<ul>", with: "<ul>\u{2029}", options: .regularExpression, range: nil)
+//                .replacingOccurrences(of: "<li>", with: "<li>\u{2028}", options: .regularExpression, range: nil)
+                .replacingOccurrences(of: "</li>", with: "\u{2029}</li>", options: .regularExpression, range: nil)
+                .replacingOccurrences(of: "(?<=[^<li>])<ol>", with: "\u{2029}<ol>", options: .regularExpression, range: nil)
+                .replacingOccurrences(of: "(?<=[^<li>])<ul>", with: "\u{2029}<ul>", options: .regularExpression, range: nil)
+//                .replacingOccurrences(of: "</ol>", with: "</ol>\u{2029}", options: .regularExpression, range: nil)
+//                .replacingOccurrences(of: "</ul>", with: "</ul>\u{2029}", options: .regularExpression, range: nil)
                 .replacingOccurrences(of: "</p>", with: "</p>\u{2029}", range: nil)
+                .replacingOccurrences(of: "</pre>", with: "</pre>\u{2029}", range: nil)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             let html = try HTMLDocument(string: document)
 
             let body = html.body ?? nil
             let text = body?.stringValue ?? ""
             let level = 0
+            let indentLevel = 0
             let children: [MastodonMetaContent.Node] = body.flatMap { body in
-                return Node.parse(element: body, parentText: text[...], parentLevel: level + 1)
+                return Node.parse(
+                    element: body,
+                    parentText: text[...],
+                    parentLevel: level + 1,
+                    parentIndentLevel: indentLevel      // not indent for default root
+                )
             } ?? []
             let node = Node(
                 level: level,
+                indentLevel: indentLevel,
                 text: text[...],
                 tagName: body?.tag,
                 attributes: body?.attributes ?? [:],
@@ -106,10 +135,19 @@ extension MastodonMetaContent {
             return node
         }
 
-        static func parse(element: XMLElement, parentText: Substring, parentLevel: Int) -> [Node] {
+        static func parse(
+            element: XMLElement,
+            parentText: Substring,
+            parentLevel: Int,
+            parentIndentLevel: Int
+        ) -> [Node] {
             let parent = element
             let scanner = Scanner(string: String(parentText))
             scanner.charactersToBeSkipped = .none
+            
+            let parentIsList: Bool = {
+                parent.tag == "ol" || parent.tag == "ul"
+            }()
 
             var children: [Node] = []
             for _element in parent.children {
@@ -134,14 +172,21 @@ extension MastodonMetaContent {
                 let hrefEllipsis = href.flatMap { _ in _element.firstChild(css: ".ellipsis")?.stringValue }
 
                 let level = parentLevel + 1
+                let indentLevel = parentIsList ? parentIndentLevel + 1 : parentIndentLevel
                 let node = Node(
                     level: level,
+                    indentLevel: indentLevel,
                     text: text,
                     tagName: _element.tag,
                     attributes: _element.attributes,
                     href: href,
                     hrefEllipsis: hrefEllipsis,
-                    children: Node.parse(element: _element, parentText: text, parentLevel: level + 1)
+                    children: Node.parse(
+                        element: _element,
+                        parentText: text,
+                        parentLevel: level + 1,
+                        parentIndentLevel: indentLevel
+                    )
                 )
                 children.append(node)
             }
@@ -189,6 +234,12 @@ extension MastodonMetaContent.Node {
         case strikethrough
         // pre, code
         case code
+        // ol
+        case orderedList
+        // ul
+        case unorderedList
+        // li
+        case listItem(indentLevel: Int)
     }
 
     static func entities(in node: MastodonMetaContent.Node) -> [MastodonMetaContent.Node] {

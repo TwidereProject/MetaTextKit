@@ -184,6 +184,7 @@ extension MetaText {
                 guard let font = attributedString.attribute(.font, at: entity.range.location, effectiveRange: nil) as? UIFont
                 else { continue }
                 let descriptor = font.fontDescriptor
+                let paragraphStyle = attributedString.attribute(.paragraphStyle, at: entity.range.location, effectiveRange: nil) as? NSParagraphStyle ?? paragraphStyle
                 switch type {
                 case .strong:
                     if let bold = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitBold)) {
@@ -208,9 +209,21 @@ extension MetaText {
                         attributedString.addAttribute(.font, value: UIFont(descriptor: monospaced, size: font.pointSize), range: entity.range)
                     }
                     let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
-                    paragraphStyle.lineHeightMultiple = 1
-                    paragraphStyle.lineSpacing = 0
+                    // FIXME: excpet list
+                    // paragraphStyle.lineHeightMultiple = 1
+                    // paragraphStyle.lineSpacing = 0
                     attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                case .orderedList, .unorderedList:
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    paragraphStyle.paragraphSpacing = 0
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                case .listItem(let indentLevel):
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    paragraphStyle.firstLineHeadIndent = 25.0 * CGFloat(indentLevel)
+                    paragraphStyle.headIndent = 25 * CGFloat(indentLevel)
+                    paragraphStyle.paragraphSpacing = 0
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                    break
                 }
             }
         }

@@ -24,6 +24,9 @@ extension Meta {
         case underlined
         case strikethrough
         case code
+        case orderedList
+        case unorderedList
+        case listItem(indentLevel: Int)
     }
 
     public static func trim(content: String, orderedEntities: [Meta.Entity]) -> String {

@@ -27,6 +27,15 @@
           "revision": "3e48cb68d8e668d146dc59c73fb98cb628616236",
           "version": "5.13.2"
         }
+      },
+      {
+        "package": "swiftui-introspect",
+        "repositoryURL": "https://github.com/siteline/SwiftUI-Introspect.git",
+        "state": {
+          "branch": null,
+          "revision": "ccb973cfff703cba53fb88197413485c060eb26b",
+          "version": "0.10.0"
+        }
       }
     ]
   },

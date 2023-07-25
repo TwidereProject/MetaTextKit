@@ -86,6 +86,12 @@ extension MastodonMetaContent {
                 metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .strikethrough)))
             case .formatted(.code):
                 metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .code)))
+            case .formatted(.orderedList):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .orderedList)))
+            case .formatted(.unorderedList):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .unorderedList)))
+            case .formatted(.listItem(let indentLevel)):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .listItem(indentLevel: indentLevel))))
             case .none:
                 continue
             }

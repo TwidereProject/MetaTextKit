@@ -26,12 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableView.appearance().sectionHeaderTopPadding = 0;
         
         // remove List top padding on iOS 16
-        // https://stackoverflow.com/questions/73592661/how-to-remove-section-header-top-padding-in-swiftui-plain-list-with-ios16
-        var layoutConfig = UICollectionLayoutListConfiguration(appearance: .plain)
-        layoutConfig.headerMode = .supplementary
-        layoutConfig.headerTopPadding = 0
-        let listLayout = UICollectionViewCompositionalLayout.list(using: layoutConfig)
-        UICollectionView.appearance().collectionViewLayout = listLayout
+        // use SwiftUI introspect override the UICollectionView layout
         
         return true
     }

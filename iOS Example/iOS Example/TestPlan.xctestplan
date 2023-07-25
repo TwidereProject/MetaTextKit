@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "DCF19A0C-D74F-4CA0-9A1A-5B5D19344B53",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "MastodonMetaTests",
+        "name" : "MastodonMetaTests"
+      }
+    }
+  ],
+  "version" : 1
+}

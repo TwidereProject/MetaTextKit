@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftUIIntrospect
 
 struct PreviewContainer: View {
     
@@ -14,20 +15,24 @@ struct PreviewContainer: View {
     var body: some View {
         List {
             Section {
-                ForEach(0..<10) { _ in
-                    Group {
-                        switch previewKind {
-                        case .twitter:
-                            MetaTextViewPreviewCell(viewModel: .twitter)
+                switch previewKind {
+                case .twitter:
+                    ForEach(0..<10) { index in
+                        Group {
+                            cell(kind: previewKind, index: index)
                                 .alignmentGuide(.listRowSeparatorLeading) { viewDimensions in
                                     viewDimensions[.leading]
                                 }
-                        case .mastodon:
-                            MetaTextViewPreviewCell(viewModel: .mastodon)
+                        }   // end Group
+                    }
+                case .mastodon:
+                    ForEach(0..<10) { index in
+                        Group {
+                            cell(kind: previewKind, index: index)
                                 .alignmentGuide(.listRowSeparatorLeading) { viewDimensions in
                                     viewDimensions[.leading]
                                 }
-                        }
+                        }   // end Group
                     }
                 }
             } header: {
@@ -40,6 +45,13 @@ struct PreviewContainer: View {
             }
         }
         .listStyle(.plain)
+        .introspect(.list, on: .iOS(.v16, .v17)) { collectionView in
+            var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+            configuration.headerMode = .supplementary
+            configuration.headerTopPadding = .zero
+            let layout = UICollectionViewCompositionalLayout.list(using: configuration)
+            collectionView.setCollectionViewLayout(layout, animated: false)
+        }
     }
 }
 
@@ -56,4 +68,22 @@ extension PreviewContainer {
             }
         }
     }
+}
+
+extension PreviewContainer {
+    private func cell(kind: PreviewKind, index: Int) -> MetaTextViewPreviewCell {
+        switch kind {
+        case .twitter:
+            return MetaTextViewPreviewCell(viewModel: .twitter)
+        case .mastodon:
+            switch index % 2 {
+            case 0:
+                return MetaTextViewPreviewCell(viewModel: .mastodon)
+            case 1:
+                return MetaTextViewPreviewCell(viewModel: .mastodon1)
+            default:
+                return MetaTextViewPreviewCell(viewModel: .mastodon)
+            }
+        }
+    }   // end func
 }
