@@ -61,6 +61,11 @@ public struct MetaTextViewRepresentable: UIViewRepresentable {
         textView.backgroundColor = .clear                  // clear background
         textView.textContainer.lineFragmentPadding = 0     // remove leading inset
         textView.isScrollEnabled = false                   // enable dynamic height
+        textView.isSelectable = true
+        textView.isEditable = false
+        
+        // force to use TextKit 1
+        _ = textView.layoutManager
 
         metaText.configure(content: metaContent)
         
