@@ -89,4 +89,17 @@ extension MetaTextView {
             break
         }
     }
+    
+    public override func copy(_ sender: Any?) {
+        super.copy(sender)
+        
+        // escape the text layout mark
+        // maybe rich text copy supports
+        if let text = UIPasteboard.general.string {
+            let result = text
+                .replacingOccurrences(of: "\u{2028}", with: "\n")
+                .replacingOccurrences(of: "\u{2029}", with: "\n")
+            UIPasteboard.general.string = result
+        }
+    }
 }

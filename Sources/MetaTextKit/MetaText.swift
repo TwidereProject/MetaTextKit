@@ -216,12 +216,20 @@ extension MetaText {
                 case .orderedList, .unorderedList:
                     let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
                     paragraphStyle.paragraphSpacing = 0
+                    paragraphStyle.paragraphSpacingBefore = 0
                     attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
                 case .listItem(let indentLevel):
                     let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
-                    paragraphStyle.firstLineHeadIndent = 25.0 * CGFloat(indentLevel)
-                    paragraphStyle.headIndent = 25 * CGFloat(indentLevel)
+                    // set tab stop
+                    // let tab = NSTextTab(textAlignment: .left, location: 20)
+                    // paragraphStyle.tabStops = Array(repeating: tab, count: indentLevel)
+                    // set indent for the list
+                    let indent = 20.0 * CGFloat(indentLevel)
+                    paragraphStyle.firstLineHeadIndent = indent
+                    paragraphStyle.headIndent = indent
+                    // remove the spacing between list items
                     paragraphStyle.paragraphSpacing = 0
+                    paragraphStyle.paragraphSpacingBefore = 0
                     attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
                     break
                 }

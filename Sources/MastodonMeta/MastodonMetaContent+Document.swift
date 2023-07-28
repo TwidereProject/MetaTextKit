@@ -12,14 +12,13 @@ import Fuzi
 extension MastodonMetaContent {
 
     public static func convert(document content: MastodonContent) throws -> MastodonMetaContent {
-        let document: String = {
-            var document = content.content
-            for (shortcode, url) in content.emojis {
-                let emojiNode = #"<span class="emoji" href="\#(url)" shortcode="\#(shortcode)">:\#(shortcode):</span>"#
-                let pattern = ":\(shortcode):"
-                document = document.replacingOccurrences(of: pattern, with: emojiNode)
+        let document: HTMLDocument = try {
+            do {
+                return try content.preprocess()
+            } catch {
+                let string = content.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                return try HTMLDocument(string: string, encoding: .utf8)
             }
-            return document.trimmingCharacters(in: .whitespacesAndNewlines)
         }()
         let rootNode = try Node.parse(document: document)
         let rootText = String(rootNode.text)
@@ -100,7 +99,7 @@ extension MastodonMetaContent {
         let trimmed = Meta.trim(content: rootText, orderedEntities: metaEntities)
 
         return MastodonMetaContent(
-            document: document,
+            document: content.content,
             original: rootText,
             trimmed: trimmed,
             entities: metaEntities

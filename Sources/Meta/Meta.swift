@@ -28,6 +28,20 @@ extension Meta {
         case unorderedList
         case listItem(indentLevel: Int)
     }
+    
+}
+
+extension Meta {
+    public var primaryText: String {
+        switch self {
+        case .url(let text, _, _, _):      return text
+        case .emoji(let text, _, _, _):    return text
+        case .hashtag(let text, _, _):     return text
+        case .mention(let text, _, _):     return text
+        case .email(let text, _):          return text
+        case .formatted(let text, _):      return text
+        }
+    }
 
     public static func trim(content: String, orderedEntities: [Meta.Entity]) -> String {
         var content = content
@@ -62,5 +76,23 @@ extension Meta {
         for moveEntity in moveEntities {
             moveEntity.range.location += offset
         }
+    }
+}
+
+extension Meta: CustomDebugStringConvertible {
+    private var kind: String {
+        switch self {
+        case .url: return "URL"
+        case .hashtag: return "hashtag"
+        case .mention: return "mention"
+        case .email: return "email"
+        case .emoji: return "emoji"
+        case .formatted(_, let formatType): return "formatted.\(formatType)"
+        }
+    }
+    
+    public var debugDescription: String {
+        let encodedContent = primaryText.rawRepresent
+        return "\(kind): \(encodedContent)"
     }
 }

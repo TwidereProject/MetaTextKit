@@ -6,17 +6,17 @@
         "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
         "state": {
           "branch": null,
-          "revision": "8dd85aee02e39dd280c75eef88ffdb86eed4b07b",
-          "version": "5.6.2"
+          "revision": "bc268c28fb170f494de9e9927c371b8342979ece",
+          "version": "5.7.1"
         }
       },
       {
         "package": "Fuzi",
-        "repositoryURL": "https://github.com/cezheng/Fuzi.git",
+        "repositoryURL": "https://github.com/TwidereProject/Fuzi.git",
         "state": {
-          "branch": null,
-          "revision": "f08c8323da21e985f3772610753bcfc652c2103f",
-          "version": "3.1.3"
+          "branch": "feature/raw-dump",
+          "revision": "e4d2d9ecc4a14b48db08ce833742049ad9fade6d",
+          "version": null
         }
       },
       {
@@ -24,8 +24,17 @@
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {
           "branch": null,
-          "revision": "3e48cb68d8e668d146dc59c73fb98cb628616236",
-          "version": "5.13.2"
+          "revision": "633996a807442ec28df9d33b0f88ce57a0e2fdbf",
+          "version": "5.17.0"
+        }
+      },
+      {
+        "package": "SwiftSoup",
+        "repositoryURL": "https://github.com/scinfu/SwiftSoup.git",
+        "state": {
+          "branch": null,
+          "revision": "8b6cf29eead8841a1fa7822481cb3af4ddaadba6",
+          "version": "2.6.1"
         }
       },
       {

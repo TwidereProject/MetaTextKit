@@ -5,9 +5,12 @@
 //  Created by Cirno MainasuK on 2021-6-25.
 //
 
+import os.log
 import Foundation
 
 public struct MastodonContent {
+    let logger = Logger(subsystem: "MastodonContent", category: "Modal")
+    
     public typealias Shortcode = String
     public typealias Emojis = [Shortcode: String]
     
