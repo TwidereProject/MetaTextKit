@@ -84,23 +84,6 @@ public class MetaLayoutManager: NSLayoutManager {
 
                 var frame = attachment.contentFrame
                 frame.origin.y -= frame.height      // tweak frame
-                if frame.origin.x == 0 {
-                    // attachment user interact (a.k.a long press) cause origin.x set to ZERO with wrong origin.y
-                    // which cause the wrong image view position
-                    // check it and locate to correct location here
-                    let glyphRange = glyphRange(forCharacterRange: range, actualCharacterRange: nil)
-                    if let textContainer = textContainer(forGlyphAt: glyphRange.location, effectiveRange: nil) {
-                        let glyphBounds = boundingRect(forGlyphRange: glyphRange, in: textContainer)
-                        frame.origin.x = glyphBounds.origin.x
-                        let textViewPadding: CGFloat = {
-                            var padding = textContainer.lineFragmentPadding
-                            guard let textView = hostView as? UITextView else { return padding }
-                            padding += textView.contentInset.top
-                            return padding
-                        }()
-                        frame.origin.y = glyphBounds.origin.y + textViewPadding
-                    }
-                }
                 attachment.content.frame = frame
 
                 if attachment.content.superview == nil {
@@ -109,6 +92,53 @@ public class MetaLayoutManager: NSLayoutManager {
                 }
 
                 displayingAttachmentContentViews.append(attachment.content)
+            }
+            
+            // draw blockquote decoration
+            textStorage.enumerateAttribute(
+                .meta,
+                in: NSRange(location: 0, length: textStorage.length),
+                options: .reverse
+            ) { meta, range, canStop in
+                guard let meta = meta as? Meta else {
+                    return
+                }
+                
+                guard let textContainer = textContainer(forGlyphAt: glyphsToShow.location, effectiveRange: nil) else { return }
+                guard let context = UIGraphicsGetCurrentContext() else { return }
+                
+                switch meta {
+                case .formatted(_, .blockquote):
+                    // draw redacted style text
+                    UIGraphicsPushContext(context)
+                    let rect: CGRect = {
+                        let glyphRange = glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+                        let _rect = boundingRect(forGlyphRange: glyphRange, in: textContainer)
+                        let textViewPadding: CGFloat = {
+                            var padding = textContainer.lineFragmentPadding
+                            guard let textView = hostView as? UITextView else { return padding }
+                            padding += textView.contentInset.top
+                            return padding
+                        }()
+                        let paragraphStyle = textStorage.attribute(.paragraphStyle, at: range.location, effectiveRange: nil) as? NSParagraphStyle
+                        return CGRect(
+                            x: 0,
+                            y: _rect.origin.y + textViewPadding + (paragraphStyle?.paragraphSpacing ?? 4),
+                            width: 5,
+                            height: _rect.height + (paragraphStyle?.paragraphSpacing ?? 4) + (paragraphStyle?.paragraphSpacingBefore ?? 4)
+                        )
+                    }()
+                    let fillColor: UIColor = {
+                        let foregroundColor = textStorage.attribute(.foregroundColor, at: range.location, effectiveRange: nil) as? UIColor
+                        let fillColor = foregroundColor ?? UIColor.label
+                        return fillColor
+                    }()
+                    context.setFillColor(fillColor.withAlphaComponent(0.25).cgColor)
+                    context.fill(rect)
+                    UIGraphicsPopContext()
+                default:
+                    break
+                }
             }
         }   // end if isRedactedMode { … } else { … }
 

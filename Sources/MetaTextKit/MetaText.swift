@@ -21,11 +21,13 @@ public class MetaText: NSObject {
     public let textView: MetaTextView
 
     static var fontSize: CGFloat = 17
+    static var tabStopIndent: CGFloat = 20
 
     public var paragraphStyle: NSMutableParagraphStyle = {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 5
-        style.paragraphSpacing = 8
+        style.paragraphSpacing = 4
+        style.paragraphSpacingBefore = 4
         return style
     }()
 
@@ -63,7 +65,7 @@ public class MetaText: NSObject {
 
 extension MetaText {
 
-    open var backedString: String {
+    public var backedString: String {
         let string = textStorage.string
         let nsString = NSMutableString(string: string)
         textStorage.enumerateAttribute(
@@ -110,7 +112,7 @@ extension MetaText {
 
 // MARK: - MetaTextStorageDelegate
 extension MetaText: MetaTextStorageDelegate {
-    open func processEditing(_ textStorage: MetaTextStorage) -> MetaContent? {
+    public func processEditing(_ textStorage: MetaTextStorage) -> MetaContent? {
         // note: check the attachment content view needs remove or not
         // "Select All" then delete text not call the `drawGlyphs` methold
         if textStorage.length == 0 {
@@ -164,15 +166,83 @@ extension MetaText {
             range: NSRange(location: 0, length: attributedString.length)
         )
 
+
+        // paragraph
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
+
         // meta
         let stringRange = NSRange(location: 0, length: attributedString.length)
         for entity in content.entities {
-            var linkAttributes = linkAttributes
-            linkAttributes[.meta] = entity.meta
-            // FIXME: the emoji make cause wrong entity range out of bounds
-            // workaround: use intersection range temporary
-            let range = NSIntersectionRange(stringRange, entity.range)
-            attributedString.addAttributes(linkAttributes, range: range)
+            switch entity.meta {
+            case .url, .hashtag, .mention, .email, .emoji:
+                var linkAttributes = linkAttributes
+                linkAttributes[.meta] = entity.meta
+                // FIXME: the emoji make cause wrong entity range out of bounds
+                // workaround: use intersection range temporary
+                let range = NSIntersectionRange(stringRange, entity.range)
+                attributedString.addAttributes(linkAttributes, range: range)
+            case .formatted(_, let type):
+                attributedString.addAttribute(.meta, value: entity.meta, range: entity.range)
+                guard let font = attributedString.attribute(.font, at: entity.range.location, effectiveRange: nil) as? UIFont
+                else { continue }
+                let descriptor = font.fontDescriptor
+                let paragraphStyle = attributedString.attribute(.paragraphStyle, at: entity.range.location, effectiveRange: nil) as? NSParagraphStyle ?? paragraphStyle
+                switch type {
+                case .strong:
+                    if let bold = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitBold)) {
+                        attributedString.addAttribute(.font, value: UIFont(descriptor: bold, size: font.pointSize), range: entity.range)
+                    }
+                case .emphasized:
+                    if let italic = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitItalic)) {
+                        attributedString.addAttribute(.font, value: UIFont(descriptor: italic, size: font.pointSize), range: entity.range)
+                    }
+                case .underlined:
+                    attributedString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: entity.range)
+                    if let underlineColor = textAttributes[.foregroundColor] as? UIColor {
+                        attributedString.addAttribute(.underlineColor, value: underlineColor, range: entity.range)
+                    }
+                case .strikethrough:
+                    attributedString.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: entity.range)
+                    if let strikethroughColor = textAttributes[.foregroundColor] as? UIColor {
+                        attributedString.addAttribute(.strikethroughColor, value: strikethroughColor, range: entity.range)
+                    }
+                case .code:
+                    if let monospaced = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitMonoSpace)) {
+                        attributedString.addAttribute(.font, value: UIFont(descriptor: monospaced, size: font.pointSize), range: entity.range)
+                    }
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    // FIXME: excpet list
+                    paragraphStyle.lineHeightMultiple = 0.8
+                    paragraphStyle.lineSpacing = 0
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                case .blockquote:
+                    // set indent
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    paragraphStyle.firstLineHeadIndent = 10
+                    paragraphStyle.headIndent = 10
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                    // set text color
+                    if let foregroundColor = textAttributes[.foregroundColor] as? UIColor {
+                        attributedString.addAttribute(.foregroundColor, value: foregroundColor.withAlphaComponent(0.5), range: entity.range)
+                    }
+                case .orderedList, .unorderedList:
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    paragraphStyle.paragraphSpacing = 0
+                    paragraphStyle.paragraphSpacingBefore = 0
+                    // set tab stop
+                    let terminator = NSTextTab.columnTerminators(for: .current)
+                    paragraphStyle.tabStops = (0..<10).map { i -> NSTextTab in
+                        NSTextTab(textAlignment: .left, location: MetaText.tabStopIndent * CGFloat(i), options: [.columnTerminators: terminator])
+                    }
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                case .listItem:
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    // remove the spacing between list items
+                    paragraphStyle.paragraphSpacing = 0
+                    paragraphStyle.paragraphSpacingBefore = 0
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                }
+            }
         }
 
         // attachment
@@ -191,12 +261,9 @@ extension MetaText {
 
             // inject attachment via replace string at entity range
             attributedString.replaceCharacters(in: entity.range, with: NSAttributedString(attachment: attachment))
+            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
         }
         allRange = NSRange(location: 0, length: attributedString.length)
-
-        // paragraph
-        // set after attachment to prevent paragraphStyle be replaced (e.g. attachment at the head of paragraph)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: allRange)
 
         return replacedAttachments
     }

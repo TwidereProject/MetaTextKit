@@ -12,37 +12,36 @@ import Fuzi
 extension MastodonMetaContent {
 
     public static func convert(document content: MastodonContent) throws -> MastodonMetaContent {
-        let document: String = {
-            var document = content.content
-            for (shortcode, url) in content.emojis {
-                let emojiNode = #"<span class="emoji" href="\#(url)" shortcode="\#(shortcode)">:\#(shortcode):</span>"#
-                let pattern = ":\(shortcode):"
-                document = document.replacingOccurrences(of: pattern, with: emojiNode)
+        let document: HTMLDocument = try {
+            do {
+                return try content.preprocess()
+            } catch {
+                let string = content.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                return try HTMLDocument(string: string, encoding: .utf8)
             }
-            return document.trimmingCharacters(in: .whitespacesAndNewlines)
         }()
         let rootNode = try Node.parse(document: document)
-        let text = String(rootNode.text)
+        let rootText = String(rootNode.text)
 
         var metaEntities: [Meta.Entity] = []
         let metaNodes = MastodonMetaContent.Node.entities(in: rootNode)
         for node in metaNodes {
-            let range = NSRange(node.text.startIndex..<node.text.endIndex, in: text)
+            let range = NSRange(node.text.startIndex..<node.text.endIndex, in: rootText)
 
+            let nodeText = String(node.text)
             switch node.type {
             case .url:
                 guard let href = node.href else { continue }
-                let text = String(node.text)
                 let trimmed: String = {
                     if let hrefEllipsis = node.hrefEllipsis {
-                        return hrefEllipsis + "..."
+                        return hrefEllipsis + "…"
                     } else {
-                        return text
+                        return nodeText
                     }
                 }()
                 let entity = Meta.Entity(
                     range: range,
-                    meta: .url(text, trimmed: trimmed, url: href, userInfo: nil)
+                    meta: .url(nodeText, trimmed: trimmed, url: href, userInfo: nil)
                 )
                 metaEntities.append(entity)
             case .hashtag:
@@ -50,11 +49,10 @@ extension MastodonMetaContent {
                 node.href.flatMap { href in
                     userInfo["href"] = href
                 }
-                let string = String(node.text)
-                let hashtag = string.deletingPrefix("#")
+                let hashtag = nodeText.deletingPrefix("#")
                 let entity = Meta.Entity(
                     range: range,
-                    meta: .hashtag(string, hashtag: hashtag, userInfo: userInfo)
+                    meta: .hashtag(nodeText, hashtag: hashtag, userInfo: userInfo)
                 )
                 metaEntities.append(entity)
             case .mention:
@@ -62,11 +60,10 @@ extension MastodonMetaContent {
                 node.href.flatMap { href in
                     userInfo["href"] = href
                 }
-                let string = String(node.text)
-                let mention = string.deletingPrefix("@")
+                let mention = nodeText.deletingPrefix("@")
                 let entity = Meta.Entity(
                     range: range,
-                    meta: .mention(string, mention: mention, userInfo: userInfo)
+                    meta: .mention(nodeText, mention: mention, userInfo: userInfo)
                 )
                 metaEntities.append(entity)
             case .emoji:
@@ -78,16 +75,34 @@ extension MastodonMetaContent {
                     meta: .emoji(string, shortcode: shortcode, url: href, userInfo: nil)
                 )
                 metaEntities.append(entity)
+            case .formatted(.strong):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .strong)))
+            case .formatted(.emphasized):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .emphasized)))
+            case .formatted(.underlined):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .underlined)))
+            case .formatted(.strikethrough):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .strikethrough)))
+            case .formatted(.code):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .code)))
+            case .formatted(.blockquote):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .blockquote)))
+            case .formatted(.orderedList):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .orderedList)))
+            case .formatted(.unorderedList):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .unorderedList)))
+            case .formatted(.listItem(let indentLevel)):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .listItem(indentLevel: indentLevel))))
             case .none:
                 continue
             }
         }
 
-        let trimmed = Meta.trim(content: text, orderedEntities: metaEntities)
+        let trimmed = Meta.trim(content: rootText, orderedEntities: metaEntities)
 
         return MastodonMetaContent(
-            document: document,
-            original: text,
+            document: content.content,
+            original: rootText,
             trimmed: trimmed,
             entities: metaEntities
         )

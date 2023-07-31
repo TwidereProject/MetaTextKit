@@ -9,16 +9,22 @@ import UIKit
 
 final class TabBarController: UITabBarController {
  
-    let mastodonStatusViewController = MastodonStatusViewController()
-    let twitterStatusViewController = TwitterStatusViewController()
+    let previewViewController = PreviewViewController()
+    // let mastodonStatusViewController = MastodonStatusViewController()
+    // let twitterStatusViewController = TwitterStatusViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let viewControllers: [UIViewController] = [
-            UINavigationController(rootViewController: mastodonStatusViewController),
-            UINavigationController(rootViewController: twitterStatusViewController)
+            UINavigationController(rootViewController: previewViewController),
+            // UINavigationController(rootViewController: mastodonStatusViewController),
+            // UINavigationController(rootViewController: twitterStatusViewController)
         ]
+        previewViewController.title = "Preview"
+        previewViewController.tabBarItem.image = UIImage(systemName: "list.bullet.rectangle.fill")
+        //mastodonStatusViewController.title = "Mastodon"
+        //twitterStatusViewController.title = "Twitter"
         setViewControllers(viewControllers, animated: false)
     }
     

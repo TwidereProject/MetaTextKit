@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DB1A04AC2A690C6800B65ECA /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04AB2A690C6800B65ECA /* UIViewPreview.swift */; };
+		DB1A04AF2A690E7700B65ECA /* MetaTextViewPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04AE2A690E7700B65ECA /* MetaTextViewPreviewCell.swift */; };
+		DB1A04B32A69293800B65ECA /* MetaTextViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04B22A69293800B65ECA /* MetaTextViewRepresentable.swift */; };
+		DB1A04B52A69295D00B65ECA /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04B42A69295D00B65ECA /* NSLayoutConstraint.swift */; };
+		DB1A04B72A69299000B65ECA /* PlaintextMetaContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04B62A69299000B65ECA /* PlaintextMetaContent.swift */; };
+		DB1A04BA2A692A3F00B65ECA /* ViewLayoutFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04B92A692A3F00B65ECA /* ViewLayoutFrame.swift */; };
+		DB1A04BC2A693C6C00B65ECA /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04BB2A693C6C00B65ECA /* PreviewViewController.swift */; };
+		DB1A04BE2A693CFC00B65ECA /* PreviewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A04BD2A693CFC00B65ECA /* PreviewContainer.swift */; };
+		DB1A04C62A6FAFD200B65ECA /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = DB1A04C52A6FAFD200B65ECA /* SwiftUIIntrospect */; };
+		DB394CC62A70F35700B77E91 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = DB394CC52A70F35700B77E91 /* TestPlan.xctestplan */; };
 		DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB585015269D6312006CB091 /* TwitterStatusViewController.swift */; };
 		DB77FF6A2842B57B00182A0B /* MetaTextKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB77FF692842B57B00182A0B /* MetaTextKit */; };
 		DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB837010266E1730005CE2A1 /* AppDelegate.swift */; };
@@ -22,6 +32,15 @@
 /* Begin PBXFileReference section */
 		9CAF45C0D37785EFEF6B09CD /* Pods-iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.release.xcconfig"; path = "Target Support Files/Pods-iOS Example/Pods-iOS Example.release.xcconfig"; sourceTree = "<group>"; };
 		BAD19EE75CEEA66BEE085A2E /* Pods_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB1A04AB2A690C6800B65ECA /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
+		DB1A04AE2A690E7700B65ECA /* MetaTextViewPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTextViewPreviewCell.swift; sourceTree = "<group>"; };
+		DB1A04B22A69293800B65ECA /* MetaTextViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTextViewRepresentable.swift; sourceTree = "<group>"; };
+		DB1A04B42A69295D00B65ECA /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
+		DB1A04B62A69299000B65ECA /* PlaintextMetaContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaintextMetaContent.swift; sourceTree = "<group>"; };
+		DB1A04B92A692A3F00B65ECA /* ViewLayoutFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLayoutFrame.swift; sourceTree = "<group>"; };
+		DB1A04BB2A693C6C00B65ECA /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		DB1A04BD2A693CFC00B65ECA /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
+		DB394CC52A70F35700B77E91 /* TestPlan.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		DB585015269D6312006CB091 /* TwitterStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterStatusViewController.swift; sourceTree = "<group>"; };
 		DB83700D266E1730005CE2A1 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB837010266E1730005CE2A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -41,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB1A04C62A6FAFD200B65ECA /* SwiftUIIntrospect in Frameworks */,
 				F8B964941D76B076507665B1 /* Pods_iOS_Example.framework in Frameworks */,
 				DB77FF6A2842B57B00182A0B /* MetaTextKit in Frameworks */,
 			);
@@ -56,6 +76,36 @@
 				9CAF45C0D37785EFEF6B09CD /* Pods-iOS Example.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		DB1A04AA2A690B3600B65ECA /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				DB1A04AE2A690E7700B65ECA /* MetaTextViewPreviewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		DB1A04AD2A690C6C00B65ECA /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				DB1A04AA2A690B3600B65ECA /* Cell */,
+				DB1A04BD2A693CFC00B65ECA /* PreviewContainer.swift */,
+				DB1A04BB2A693C6C00B65ECA /* PreviewViewController.swift */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		DB1A04B82A692A2600B65ECA /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				DB1A04AB2A690C6800B65ECA /* UIViewPreview.swift */,
+				DB1A04B22A69293800B65ECA /* MetaTextViewRepresentable.swift */,
+				DB1A04B92A692A3F00B65ECA /* ViewLayoutFrame.swift */,
+				DB1A04B42A69295D00B65ECA /* NSLayoutConstraint.swift */,
+				DB1A04B62A69299000B65ECA /* PlaintextMetaContent.swift */,
+			);
+			path = Vendor;
 			sourceTree = "<group>";
 		};
 		DB837004266E1730005CE2A1 = {
@@ -80,6 +130,9 @@
 		DB83700F266E1730005CE2A1 /* iOS Example */ = {
 			isa = PBXGroup;
 			children = (
+				DB394CC52A70F35700B77E91 /* TestPlan.xctestplan */,
+				DB1A04B82A692A2600B65ECA /* Vendor */,
+				DB1A04AD2A690C6C00B65ECA /* Preview */,
 				DB837010266E1730005CE2A1 /* AppDelegate.swift */,
 				DB837012266E1730005CE2A1 /* SceneDelegate.swift */,
 				DB83702A266E1E8F005CE2A1 /* TabBarController.swift */,
@@ -121,6 +174,7 @@
 			name = "iOS Example";
 			packageProductDependencies = (
 				DB77FF692842B57B00182A0B /* MetaTextKit */,
+				DB1A04C52A6FAFD200B65ECA /* SwiftUIIntrospect */,
 			);
 			productName = "iOS Example";
 			productReference = DB83700D266E1730005CE2A1 /* iOS Example.app */;
@@ -149,6 +203,9 @@
 				Base,
 			);
 			mainGroup = DB837004266E1730005CE2A1;
+			packageReferences = (
+				DB1A04C42A6FAFD200B65ECA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+			);
 			productRefGroup = DB83700E266E1730005CE2A1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -165,6 +222,7 @@
 			files = (
 				DB83701D266E1732005CE2A1 /* LaunchScreen.storyboard in Resources */,
 				DB83701A266E1732005CE2A1 /* Assets.xcassets in Resources */,
+				DB394CC62A70F35700B77E91 /* TestPlan.xctestplan in Resources */,
 				DB837018266E1730005CE2A1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,11 +276,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB1A04B72A69299000B65ECA /* PlaintextMetaContent.swift in Sources */,
 				DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */,
+				DB1A04AF2A690E7700B65ECA /* MetaTextViewPreviewCell.swift in Sources */,
 				DB83702B266E1E8F005CE2A1 /* TabBarController.swift in Sources */,
 				DBA4605E268630B0004E094B /* MastodonStatusViewController.swift in Sources */,
 				DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */,
+				DB1A04AC2A690C6800B65ECA /* UIViewPreview.swift in Sources */,
 				DB837013266E1730005CE2A1 /* SceneDelegate.swift in Sources */,
+				DB1A04BA2A692A3F00B65ECA /* ViewLayoutFrame.swift in Sources */,
+				DB1A04B32A69293800B65ECA /* MetaTextViewRepresentable.swift in Sources */,
+				DB1A04BC2A693C6C00B65ECA /* PreviewViewController.swift in Sources */,
+				DB1A04BE2A693CFC00B65ECA /* PreviewContainer.swift in Sources */,
+				DB1A04B52A69295D00B65ECA /* NSLayoutConstraint.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +365,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -354,7 +420,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -427,7 +493,23 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		DB1A04C42A6FAFD200B65ECA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		DB1A04C52A6FAFD200B65ECA /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB1A04C42A6FAFD200B65ECA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = SwiftUIIntrospect;
+		};
 		DB77FF692842B57B00182A0B /* MetaTextKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaTextKit;
