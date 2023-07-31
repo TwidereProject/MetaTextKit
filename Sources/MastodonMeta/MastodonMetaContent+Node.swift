@@ -66,6 +66,8 @@ extension MastodonMetaContent {
                     return .formatted(.strikethrough)
                 case "pre", "code":
                     return .formatted(.code)
+                case "blockquote":
+                    return .formatted(.blockquote)
                 case "ol":
                     return .formatted(.orderedList)
                 case "ul":
@@ -112,6 +114,8 @@ extension MastodonMetaContent.Node {
         case strikethrough
         // pre, code
         case code
+        // blockquote
+        case blockquote
         // ol
         case orderedList
         // ul
@@ -173,7 +177,7 @@ extension MastodonMetaContent.Node {
         
         var children: [MastodonMetaContent.Node] = []
         for _element in parent.children {
-            let _text = _element.stringValue
+            let _text = _element.stringValue.trimmingCharacters(in: .newlines)
             
             // scan element text
             _ = scanner.scanUpToString(_text)

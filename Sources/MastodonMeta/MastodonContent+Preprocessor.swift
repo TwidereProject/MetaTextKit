@@ -23,8 +23,6 @@ extension MastodonContent {
                 .replacingOccurrences(of: "<h1>|<h2>|<h3>|<h4>|<h5>|<h6>", with: "<p><strong>", options: .regularExpression, range: nil)
                 .replacingOccurrences(of: "</h1>|</h2>|</h3>|</h4>|</h5>|</h6>", with: "</strong></p>", options: .regularExpression, range: nil)
                 .replacingOccurrences(of: "<br>|<br />", with: "\u{2028}", options: .regularExpression, range: nil)
-                .replacingOccurrences(of: "(?<=[^<li>])<ol>", with: "\u{2029}<ol>", options: .regularExpression, range: nil)
-                .replacingOccurrences(of: "(?<=[^<li>])<ul>", with: "\u{2029}<ul>", options: .regularExpression, range: nil)
                 .replacingOccurrences(of: "</pre>", with: "</pre>\u{2029}", range: nil)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             return content
@@ -57,18 +55,19 @@ extension MastodonContent {
         
         // 4. update document from end to start
         var text = tree.text
-        for node in array.reversed() {
-            let operations = node.operations
-                .sorted(by: { node.text.distance(from: $0.range.upperBound, to: $1.range.lowerBound) > 0 })
-                .reversed()
-            for operation in operations {
-                text = operation.operate(text)
-            }
+        let operations = array
+            .map { $0.operations }
+            .flatMap { $0 }
+            .sorted(by: { text.distance(from: $0.range.upperBound, to: $1.range.lowerBound) > 0 })
+            .reversed()
+        for operation in operations {
+            text = operation.operate(text)
         }
         
         do {
             text = text
                 .trimmingCharacters(in: .whitespacesAndNewlines)
+            print(text.rawRepresent)
             let document = try HTMLDocument(string: text, encoding: .utf8)
             return document
         } catch {
@@ -115,6 +114,25 @@ extension MastodonContent.PreprocessInfo {
             return text
         }
     }   // end enum
+    
+    var isOrderedListItem: Bool? {
+        var parent = node.parent
+        repeat {
+            switch parent?.tag {
+            case "ol": return true
+            case "ul": return false
+            default: break
+            }
+            parent = parent?.parent
+        } while parent != nil
+        return nil
+    }
+    
+    var indexOfListItem: Int {
+        guard let parent = node.parent else { return 0 }
+        guard let index = parent.children.firstIndex(of: node) else { return 0 }
+        return index
+    }
 }
 
 extension MastodonContent.PreprocessInfo {
@@ -128,9 +146,33 @@ extension MastodonContent.PreprocessInfo {
         case "li":
             if let openTagRange = text.range(of: "<li>", options: [], range: range) {
                 let indent = String(repeating: "\t", count: attribute.levelForList)
-                operations.append(.insert(range: openTagRange.upperBound..<openTagRange.upperBound, content: indent))
+                let index: String = {
+                    if isOrderedListItem == true {
+                        let index = indexOfListItem + 1
+                        return "\(index). "
+                    } else {
+                        return "- "
+                    }
+                }()
+                operations.append(.insert(range: openTagRange.upperBound..<openTagRange.upperBound, content: indent + index))
             }
-            if let closeTagRange = text.range(of: "</li>", options: .backwards, range: range) {
+            if let closeTagRange = text.range(of: "</li>", options: .backwards, range: range), node.nextSibling?.tag == "li" {
+                operations.append(.insert(range: closeTagRange.lowerBound..<closeTagRange.lowerBound, content: "\u{2029}"))
+            }
+        case "ul":
+            if let openTagRange = text.range(of: "<ul>", options: [], range: range),
+               let parent = node.parent, parent.tag == "li" {
+                operations.append(.insert(range: openTagRange.lowerBound..<openTagRange.lowerBound, content: "\u{2029}"))
+            }
+            if let closeTagRange = text.range(of: "</ul>", options: .backwards, range: range), attribute.levelForList == 1 {
+                operations.append(.insert(range: closeTagRange.lowerBound..<closeTagRange.lowerBound, content: "\u{2029}"))
+            }
+        case "ol":
+            if let openTagRange = text.range(of: "<ol>", options: [], range: range),
+               let parent = node.parent, parent.tag == "li" {
+                operations.append(.insert(range: openTagRange.lowerBound..<openTagRange.lowerBound, content: "\u{2029}"))
+            }
+            if let closeTagRange = text.range(of: "</ol>", options: .backwards, range: range), attribute.levelForList == 1 {
                 operations.append(.insert(range: closeTagRange.lowerBound..<closeTagRange.lowerBound, content: "\u{2029}"))
             }
         default:

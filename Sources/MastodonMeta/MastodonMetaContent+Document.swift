@@ -85,6 +85,8 @@ extension MastodonMetaContent {
                 metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .strikethrough)))
             case .formatted(.code):
                 metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .code)))
+            case .formatted(.blockquote):
+                metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .blockquote)))
             case .formatted(.orderedList):
                 metaEntities.append(Meta.Entity(range: range, meta: .formatted(nodeText, .orderedList)))
             case .formatted(.unorderedList):

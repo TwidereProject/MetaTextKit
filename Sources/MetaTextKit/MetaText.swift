@@ -21,11 +21,13 @@ public class MetaText: NSObject {
     public let textView: MetaTextView
 
     static var fontSize: CGFloat = 17
+    static var tabStopIndent: CGFloat = 20
 
     public var paragraphStyle: NSMutableParagraphStyle = {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 5
-        style.paragraphSpacing = 8
+        style.paragraphSpacing = 4
+        style.paragraphSpacingBefore = 4
         return style
     }()
 
@@ -210,28 +212,35 @@ extension MetaText {
                     }
                     let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
                     // FIXME: excpet list
-                    // paragraphStyle.lineHeightMultiple = 1
-                    // paragraphStyle.lineSpacing = 0
+                    paragraphStyle.lineHeightMultiple = 0.8
+                    paragraphStyle.lineSpacing = 0
                     attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                case .blockquote:
+                    // set indent
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                    paragraphStyle.firstLineHeadIndent = 10
+                    paragraphStyle.headIndent = 10
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                    // set text color
+                    if let foregroundColor = textAttributes[.foregroundColor] as? UIColor {
+                        attributedString.addAttribute(.foregroundColor, value: foregroundColor.withAlphaComponent(0.5), range: entity.range)
+                    }
                 case .orderedList, .unorderedList:
                     let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
                     paragraphStyle.paragraphSpacing = 0
                     paragraphStyle.paragraphSpacingBefore = 0
-                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
-                case .listItem(let indentLevel):
-                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
                     // set tab stop
-                    // let tab = NSTextTab(textAlignment: .left, location: 20)
-                    // paragraphStyle.tabStops = Array(repeating: tab, count: indentLevel)
-                    // set indent for the list
-                    let indent = 20.0 * CGFloat(indentLevel)
-                    paragraphStyle.firstLineHeadIndent = indent
-                    paragraphStyle.headIndent = indent
+                    let terminator = NSTextTab.columnTerminators(for: .current)
+                    paragraphStyle.tabStops = (0..<10).map { i -> NSTextTab in
+                        NSTextTab(textAlignment: .left, location: MetaText.tabStopIndent * CGFloat(i), options: [.columnTerminators: terminator])
+                    }
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
+                case .listItem:
+                    let paragraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
                     // remove the spacing between list items
                     paragraphStyle.paragraphSpacing = 0
                     paragraphStyle.paragraphSpacingBefore = 0
                     attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: entity.range)
-                    break
                 }
             }
         }

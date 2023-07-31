@@ -24,6 +24,7 @@ extension Meta {
         case underlined
         case strikethrough
         case code
+        case blockquote
         case orderedList
         case unorderedList
         case listItem(indentLevel: Int)
