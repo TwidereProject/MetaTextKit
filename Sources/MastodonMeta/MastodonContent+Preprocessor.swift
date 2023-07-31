@@ -67,7 +67,6 @@ extension MastodonContent {
         do {
             text = text
                 .trimmingCharacters(in: .whitespacesAndNewlines)
-            print(text.rawRepresent)
             let document = try HTMLDocument(string: text, encoding: .utf8)
             return document
         } catch {
