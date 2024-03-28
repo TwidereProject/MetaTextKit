@@ -16,11 +16,36 @@ extension TwitterMetaContent {
         twitterTextProvider: TwitterTextProvider,
         useParagraphMark: Bool = false
     ) -> TwitterMetaContent {
-        let original = useParagraphMark ? content.content.replacingOccurrences(of: "\n+", with: "\u{2029}", options: .regularExpression) : content.content
         var entities: [Meta.Entity] = []
+        
+        // Rich Text Entity
+        let richTextEntities: [Meta.Entity] = {
+            let nsContent = content.content as NSString
+            let nsContentRange = NSRange(location: 0, length: nsContent.length)
+            let entities = content.richTextTags.compactMap { tag -> Meta.Entity? in
+                guard let range = tag.range.intersection(nsContentRange), range.length > 0 else { return nil }
+                let text = nsContent.substring(with: range)
+                let styles = tag.types.compactMap { $0.metaStyleType }
+                return Meta.Entity(
+                    range: range,
+                    meta: .style(text, styles: styles, userInfo: nil)
+                )
+            }
+            let orderedEntities = entities.sorted(by: { $0.range.location < $1.range.location })
+            return orderedEntities
+        }()
+        entities.append(contentsOf: richTextEntities)
+        let original: String = {
+            if useParagraphMark {
+                return Meta.replaceParagraphMark(content: content.content, orderedEntities: richTextEntities)
+            } else {
+                return content.content
+            }
+        }()
+
+        // TwitterText Entity
         let twitterTextEntities = twitterTextProvider.entities(in: original)
             .sorted(by: { $0.range.location < $1.range.location })
-
         for twitterTextEntity in twitterTextEntities {
             let range = twitterTextEntity.range
             guard let text = original.string(in: range) else { continue }

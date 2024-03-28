@@ -7,8 +7,8 @@
 
 import Foundation
 import XCTest
-@testable import TwitterMeta
 import TwitterText
+@testable import TwitterMeta
 
 final class MetaTextViewTests: XCTestCase {
  

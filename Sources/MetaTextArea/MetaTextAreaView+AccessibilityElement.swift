@@ -108,7 +108,7 @@ extension MetaTextAreaView.AccessibilityElement {
             switch entity.meta {
             case .url, .hashtag, .cashtag, .mention, .email:
                 return .link
-            case .emoji:
+            case .emoji, .style:
                 return .staticText
             }
         }

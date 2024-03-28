@@ -28,6 +28,19 @@ extension Meta.Entity {
         case .cashtag(let text, _, _):          return text
         case .mention(let text, _, _):          return text
         case .email(let text, _):               return text
+        case .style(let text, _, _):            return text
+        }
+    }
+    
+    public var typeName: String {
+        switch self.meta {
+        case .url: return "url"
+        case .emoji: return "emoji"
+        case .hashtag: return "hashtag"
+        case .cashtag: return "cashtag"
+        case .mention: return "mention"
+        case .email: return "email"
+        case .style: return "style"
         }
     }
     
@@ -38,6 +51,6 @@ extension Meta.Entity {
 
 extension Meta.Entity: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "{\(range.debugDescription), \(primaryText)"
+        return "{\(range.debugDescription), \(primaryText), \(typeName)"
     }
 }
