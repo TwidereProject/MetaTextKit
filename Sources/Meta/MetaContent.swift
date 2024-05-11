@@ -72,7 +72,7 @@ extension MetaContent {
             }()
             attributedString[run.range].inlinePresentationIntent = inlinePresentationIntent
             attributedString[run.range].font = nil
-            print(run)
+            // print(run)
         }
         
         return attributedString

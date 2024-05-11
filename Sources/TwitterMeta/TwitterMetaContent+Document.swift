@@ -14,6 +14,7 @@ extension TwitterMetaContent {
         document content: TwitterContent,
         urlMaximumLength: Int,
         twitterTextProvider: TwitterTextProvider,
+        addtionalMetaProvider: MetaProvider? = nil,
         useParagraphMark: Bool = false
     ) -> TwitterMetaContent {
         var entities: [Meta.Entity] = []
@@ -102,6 +103,26 @@ extension TwitterMetaContent {
             }
         }
 
+        // addtional meta entity
+        if let addtionalMetaProvider {
+            let addionalEntities = addtionalMetaProvider.parse(content: original, entities: entities)
+            let orderedAddionalEntities = addionalEntities.sorted(by: { $0.range.location < $1.range.location })
+            for addionalEntity in orderedAddionalEntities {
+                let range = addionalEntity.range
+                let isIntersection = entities.contains(where: { entity in
+                    switch entity.meta {
+                    case .style:
+                        return false
+                    default:
+                        return entity.range.intersection(range) != nil
+                    }
+                })
+                guard !isIntersection else { continue }
+                entities.append(addionalEntity)
+            }
+        }
+
+        // result should be ordered
         let orderedEntities = entities.sorted(by: {
             $0.range.location < $1.range.location
         })
