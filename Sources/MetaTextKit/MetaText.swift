@@ -20,7 +20,7 @@ public class MetaText: NSObject {
     public let textStorage: MetaTextStorage
     public let textView: MetaTextView
 
-    static var fontSize: CGFloat = 17
+    public static var fontSize: CGFloat = 17
 
     public var paragraphStyle: NSMutableParagraphStyle = {
         let style = NSMutableParagraphStyle()
@@ -139,7 +139,8 @@ extension MetaText {
         textAttributes: [NSAttributedString.Key: Any],
         linkAttributes: [NSAttributedString.Key: Any],
         paragraphStyle: NSMutableParagraphStyle,
-        content: MetaContent
+        content: MetaContent,
+        fontSize: CGFloat = MetaText.fontSize
     ) -> [MetaAttachment] {
 
         // clean up
@@ -175,12 +176,6 @@ extension MetaText {
                     return traits
                 }()
                 let font: UIFont = {
-                    let fontSize: CGFloat = {
-                        guard let fontAttribute = textAttributes.first(where: { $0.key == .font }) ?? linkAttributes.first(where: { $0.key == .font }),
-                              let font = fontAttribute.value as? UIFont
-                        else { return 14.0 }
-                        return font.pointSize
-                    }()
                     let font = UIFont.systemFont(ofSize: fontSize, weight: .regular)
                     let fontDescriptor = font.fontDescriptor
                     guard let newFontDescriptor = fontDescriptor.withSymbolicTraits(traits) else {
@@ -208,7 +203,7 @@ extension MetaText {
             replacedAttachments.append(attachment)
 
             let font = attributedString.attribute(.font, at: entity.range.location, effectiveRange: nil) as? UIFont
-            let fontSize = font?.pointSize ?? MetaText.fontSize
+            let fontSize = font?.pointSize ?? fontSize
             if #available(iOS 16, *) {
                 attachment.contentFrame = CGRect(
                     origin: .zero,
