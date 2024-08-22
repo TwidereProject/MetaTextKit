@@ -22,7 +22,6 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/cezheng/Fuzi.git", from: "3.1.0"),
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.5.0"),
         .package(url: "https://github.com/SDWebImage/SDWebImage.git", from: "5.12.0"),
         .package(url: "https://github.com/TwidereProject/twitter-text.git", exact: "0.0.4"),
     ],
@@ -43,7 +42,6 @@ let package = Package(
             dependencies: [
                 "Meta",
                 .product(name: "Fuzi", package: "Fuzi"),
-                .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "SDWebImage", package: "SDWebImage"),
             ]
         ),

@@ -7,7 +7,6 @@
 
 import Foundation
 import Meta
-import Alamofire
 import SDWebImage
 
 /// Generic Mastodon status content
