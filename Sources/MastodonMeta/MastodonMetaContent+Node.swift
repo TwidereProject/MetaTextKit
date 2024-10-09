@@ -8,6 +8,10 @@
 import Foundation
 import Fuzi
 
+public enum MastodonMetaContentError: Swift.Error {
+    case invalidHTML
+}
+
 extension MastodonMetaContent {
 
     class Node {
@@ -74,8 +78,11 @@ extension MastodonMetaContent {
                 .replacingOccurrences(of: "<br>|<br />", with: "\u{2028}", options: .regularExpression, range: nil)
                 .replacingOccurrences(of: "</p>", with: "</p>\u{2029}", range: nil)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
-            let html = try HTMLDocument(string: document)
-
+            
+            guard let html = try document.cString(using: .utf8)?.withContiguousStorageIfAvailable({ ptr in
+                try HTMLDocument(buffer: ptr)
+            }) else { throw MastodonMetaContentError.invalidHTML }
+            
             let body = html.body ?? nil
             let text = body?.stringValue ?? ""
             let level = 0
