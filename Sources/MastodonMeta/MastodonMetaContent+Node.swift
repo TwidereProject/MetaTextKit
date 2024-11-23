@@ -71,7 +71,7 @@ extension MastodonMetaContent {
 
         static func parse(document: String, useParagraphMark: Bool) throws -> MastodonMetaContent.Node {
             let document = document
-                .replacingOccurrences(of: "<br>|<br />", with: useParagraphMark ? "\u{2028}" : "\n", options: .regularExpression, range: nil)
+                .replacingOccurrences(of: "<br>|<br */>", with: useParagraphMark ? "\u{2028}" : "\n", options: .regularExpression, range: nil)
                 .replacingOccurrences(of: "</p>", with: useParagraphMark ? "</p>\u{2029}" : "</p>\n", range: nil)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             let html = try HTMLDocument(string: document)
