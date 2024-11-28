@@ -34,7 +34,7 @@ extension MastodonMetaContent: MetaContent {
         guard case let .emoji(text, _, url, _) = entity.meta else { return nil }
 
         let imageView = SDAnimatedImageView()
-        let attachment = MastodonMetaAttachment(string: text, url: url, content: imageView)
+        let attachment = AnimatedImageMetaAttachment(string: text, url: url, content: imageView)
         return attachment
     }
 }

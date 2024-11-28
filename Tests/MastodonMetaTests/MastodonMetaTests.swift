@@ -23,7 +23,6 @@ final class MetaTextViewTests: XCTestCase {
             case staticURL = "static_url"
             case visibleInPicker = "visible_in_picker"
         }
-
     }
 
     func testPerformanceParseTextContent() throws {

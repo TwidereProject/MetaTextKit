@@ -8,7 +8,6 @@
 import UIKit
 
 public protocol MetaAttachment: NSTextAttachment {
-//    var delegate: MetaAttachmentDelegate? { get set }
     var string: String { get }
     var url: String { get }
     var content: UIView { get }

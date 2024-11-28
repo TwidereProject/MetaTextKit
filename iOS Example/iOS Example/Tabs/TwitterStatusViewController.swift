@@ -14,55 +14,59 @@ import twitter_text
 
 class TwitterStatusViewController: UIViewController {
 
-    let metaText = MetaText()
+    let metaText: MetaText = {
+        let metaText = MetaText()
+        metaText.textView.isScrollEnabled = false
+        return metaText
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationItem.title = "Twitter Status"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: nil,
-            image: UIImage(systemName: "ellipsis.circle"),
-            primaryAction: nil,
-            menu: UIMenu(
-                title: "", image: nil, identifier: nil, options: [], children: [
-                    UIAction(title: "End Editing", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: [], state: .off, handler: { [weak self] _ in
-                        guard let self = self else { return }
-                        self.view.endEditing(true)
-                    }),
-                    UIAction(title: "Reload Content", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: [], state: .off, handler: { [weak self] _ in
-                        guard let self = self else { return }
-                        self.setupContent()
-                    }),
-                ]
-            )
-        )
 
-        metaText.textView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(metaText.textView)
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
         NSLayoutConstraint.activate([
-            metaText.textView.topAnchor.constraint(equalTo: view.topAnchor),
-            metaText.textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            metaText.textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            metaText.textView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
 
-        metaText.delegate = self
+        let lineContainer = UIStackView()
+        lineContainer.axis = .vertical
+        lineContainer.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(lineContainer)
+        NSLayoutConstraint.activate([
+            lineContainer.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            lineContainer.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            lineContainer.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            lineContainer.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            lineContainer.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+        ])
 
-        setupContent()
+        lineContainer.addArrangedSubview(metaText.textView)
+        metaText.textView.backgroundColor = .systemGray
+        setupMetaTextContent()
+        metaText.delegate = self
     }
 
 }
 
 extension TwitterStatusViewController {
 
-    func setupContent() {
+    func setupMetaTextContent() {
         let statusContent = """
-        Tweet: \n@username: Hello 你好 こんにちは 😂😂😂 #hashtag https://twitter.com/ABCDEFG
+        (MetaText, TextKit, Editor): \n@username: Hello 你好 こんにちは 😂😂😂 #hashtag https://twitter.com/ABCDEFG
         """
-        let content = TwitterContent(content: statusContent)
+        let content = TwitterContent(
+            content: statusContent,
+            urlEntities: []
+        )
         let metaContent = TwitterMetaContent.convert(
-            content: content,
+            text: content,
             urlMaximumLength: 0,
             twitterTextProvider: OfficialTwitterTextProvider()
         )
@@ -78,9 +82,12 @@ extension TwitterStatusViewController: MetaTextDelegate {
         os_log(.info, "%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
 
         let string = metaText.textStorage.string
-        let content = TwitterContent(content: string)
+        let content = TwitterContent(
+            content: string,
+            urlEntities: []
+        )
         let metaContent = TwitterMetaContent.convert(
-            content: content,
+            text: content,
             urlMaximumLength: 0,
             twitterTextProvider: OfficialTwitterTextProvider()
         )

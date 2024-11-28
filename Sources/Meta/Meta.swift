@@ -14,8 +14,15 @@ public enum Meta {
     case mention(_ text: String, mention: String, userInfo: [AnyHashable: Any]? = nil)
     case email(_ text: String, userInfo: [AnyHashable: Any]? = nil)
     case emoji(_ text: String, shortcode: String, url: String, userInfo: [AnyHashable: Any]? = nil)
+    case icon(_ text: String, url: String, userInfo: [AnyHashable: Any]? = nil)
     case style(_ text: String, styles: [Meta.StyleType], userInfo: [AnyHashable: Any]? = nil)
 }
+
+#if DEBUG
+extension Meta {
+    public static var isDebugMode = false
+}
+#endif
 
 extension Meta {
     public enum StyleType {
@@ -128,6 +135,8 @@ extension Meta: CustomDebugStringConvertible {
         case .email(let text, _):
             return text
         case .emoji(let text, _, _, _):
+            return text
+        case .icon(let text, _, _):
             return text
         case .style(let text, _, _):
             return text

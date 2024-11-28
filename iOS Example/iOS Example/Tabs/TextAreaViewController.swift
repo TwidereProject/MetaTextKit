@@ -8,6 +8,7 @@
 import UIKit
 import MetaTextKit
 import MetaTextArea
+import MastodonMeta
 
 class TextAreaViewController: UIViewController {
     
@@ -17,7 +18,8 @@ class TextAreaViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        navigationItem.title = "Text Area"
         navigationItem.rightBarButtonItems = [
             showLayerFramesBarButtonItem
         ]
@@ -33,18 +35,14 @@ class TextAreaViewController: UIViewController {
         ])
         
         textAreaView.layer.masksToBounds = true
-        textAreaView.backgroundColor = .gray
+        textAreaView.backgroundColor = .systemOrange.withAlphaComponent(0.5)
         
         let line = #"Hello, World! I know nothing in the world that has as much power as a word. Sometimes I write one, and I look at it, until it begins to shine. <span class="h-card"><a class="u-url mention" href="https://example.com/users/@username" rel="nofollow noopener noreferrer" target="_blank">@<span>username</span></a></span> 😂 :awesome: :ablobattention: :ablobcaramelldansen: :ablobattentionreverse:"#
-        let string = Array(repeating: line, count: 3).joined(separator: "\u{2029}")
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 5
-        let attributedString = NSAttributedString(string: string, attributes: [
-            .font: UIFont.preferredFont(forTextStyle: .body),
-            .foregroundColor: UIColor.label,
-            .paragraphStyle: paragraphStyle
-        ])
-        textAreaView.textContentStorage.textStorage?.setAttributedString(attributedString)
+
+        let metaContent = try! MastodonMetaContent.convert(
+            document: MastodonContent(content: line, emojis: emojis)
+        )
+        textAreaView.configure(content: metaContent)
     }
     
 }
@@ -57,4 +55,18 @@ extension TextAreaViewController {
         
         textAreaView.textLayoutManager.textViewportLayoutController.layoutViewport()
     }
+}
+
+extension TextAreaViewController {
+    var emojis: [String: String] {
+        [
+            "apple_inc": "https://media.mstdn.jp/custom_emojis/images/000/002/171/original/b848520ba07a354c.png",
+            "awesome": "https://media.mstdn.jp/custom_emojis/images/000/002/757/original/3e0e01274120ad23.png",
+            "ablobattention": "https://media.mstdn.jp/custom_emojis/images/000/123/539/original/f3b1abf131a34b6c.png",
+            "ablobcaramelldansen": "https://media.mstdn.jp/custom_emojis/images/000/120/885/original/75cb4f59948b69ce.png",
+            "ablobattentionreverse": "https://media.mstdn.jp/custom_emojis/images/000/120/907/original/d0320f5180028c28.png",
+            "smile_face": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Emoji_u263a.svg/40px-Emoji_u263a.svg.png",
+        ]
+    }
+
 }

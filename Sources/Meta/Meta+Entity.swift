@@ -28,6 +28,7 @@ extension Meta.Entity {
         case .cashtag(let text, _, _):          return text
         case .mention(let text, _, _):          return text
         case .email(let text, _):               return text
+        case .icon(let text, _, _):             return text
         case .style(let text, _, _):            return text
         }
     }
@@ -40,6 +41,7 @@ extension Meta.Entity {
         case .cashtag(let text, _, _):          return text
         case .mention(let text, _, _):          return text
         case .email(let text, _):               return text
+        case .icon(let text, _, _):             return text
         case .style(let text, _, _):            return text
         }
     }
@@ -52,6 +54,7 @@ extension Meta.Entity {
         case .cashtag: return "cashtag"
         case .mention: return "mention"
         case .email: return "email"
+        case .icon: return "icon"
         case .style: return "style"
         }
     }

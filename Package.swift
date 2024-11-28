@@ -21,8 +21,8 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/cezheng/Fuzi.git", from: "3.1.0"),
-        .package(url: "https://github.com/SDWebImage/SDWebImage.git", from: "5.12.0"),
+        .package(url: "https://github.com/DimensionDev/Fuzi.git", from: "3.2.0"),
+        .package(url: "https://github.com/SDWebImage/SDWebImage.git", from: "5.20.0"),
         .package(url: "https://github.com/TwidereProject/twitter-text.git", exact: "0.0.4"),
     ],
     targets: [
@@ -42,7 +42,6 @@ let package = Package(
             dependencies: [
                 "Meta",
                 .product(name: "Fuzi", package: "Fuzi"),
-                .product(name: "SDWebImage", package: "SDWebImage"),
             ]
         ),
         .target(
@@ -53,7 +52,10 @@ let package = Package(
             ]
         ),
         .target(
-            name: "Meta"
+            name: "Meta",
+            dependencies: [
+                .product(name: "SDWebImage", package: "SDWebImage"),
+            ]
         ),
         .testTarget(
             name: "MastodonMetaTests",

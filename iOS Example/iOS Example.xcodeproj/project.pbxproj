@@ -3,10 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DB22C4FF2CF84F7F00210D9F /* SwiftUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB22C4FE2CF84F7900210D9F /* SwiftUIViewController.swift */; };
+		DB22C5012CF84FA800210D9F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB22C5002CF84F9700210D9F /* ContentView.swift */; };
+		DB22C5032CF8510300210D9F /* TextViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB22C5022CF8510100210D9F /* TextViewRepresentable.swift */; };
+		DB22C5062CF85C9100210D9F /* InlineIconMetaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB22C5052CF85C7700210D9F /* InlineIconMetaProvider.swift */; };
 		DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB585015269D6312006CB091 /* TwitterStatusViewController.swift */; };
 		DB71CF1526B3D9B10018F605 /* MetaTextKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB71CF1426B3D9B10018F605 /* MetaTextKit */; };
 		DB71CF1726B3DD9A0018F605 /* TextAreaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB71CF1626B3DD9A0018F605 /* TextAreaViewController.swift */; };
@@ -23,6 +27,10 @@
 /* Begin PBXFileReference section */
 		9CAF45C0D37785EFEF6B09CD /* Pods-iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.release.xcconfig"; path = "Target Support Files/Pods-iOS Example/Pods-iOS Example.release.xcconfig"; sourceTree = "<group>"; };
 		BAD19EE75CEEA66BEE085A2E /* Pods_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB22C4FE2CF84F7900210D9F /* SwiftUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewController.swift; sourceTree = "<group>"; };
+		DB22C5002CF84F9700210D9F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DB22C5022CF8510100210D9F /* TextViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewRepresentable.swift; sourceTree = "<group>"; };
+		DB22C5052CF85C7700210D9F /* InlineIconMetaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineIconMetaProvider.swift; sourceTree = "<group>"; };
 		DB585015269D6312006CB091 /* TwitterStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterStatusViewController.swift; sourceTree = "<group>"; };
 		DB71CF1626B3DD9A0018F605 /* TextAreaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaViewController.swift; sourceTree = "<group>"; };
 		DB83700D266E1730005CE2A1 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +68,28 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		DB22C4FD2CF84F7400210D9F /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				DBA4605D268630B0004E094B /* MastodonStatusViewController.swift */,
+				DB585015269D6312006CB091 /* TwitterStatusViewController.swift */,
+				DB71CF1626B3DD9A0018F605 /* TextAreaViewController.swift */,
+				DB22C5042CF85C4200210D9F /* SwiftUI */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		DB22C5042CF85C4200210D9F /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				DB22C4FE2CF84F7900210D9F /* SwiftUIViewController.swift */,
+				DB22C5002CF84F9700210D9F /* ContentView.swift */,
+				DB22C5022CF8510100210D9F /* TextViewRepresentable.swift */,
+				DB22C5052CF85C7700210D9F /* InlineIconMetaProvider.swift */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
 		DB837004266E1730005CE2A1 = {
 			isa = PBXGroup;
 			children = (
@@ -85,9 +115,7 @@
 				DB837010266E1730005CE2A1 /* AppDelegate.swift */,
 				DB837012266E1730005CE2A1 /* SceneDelegate.swift */,
 				DB83702A266E1E8F005CE2A1 /* TabBarController.swift */,
-				DBA4605D268630B0004E094B /* MastodonStatusViewController.swift */,
-				DB585015269D6312006CB091 /* TwitterStatusViewController.swift */,
-				DB71CF1626B3DD9A0018F605 /* TextAreaViewController.swift */,
+				DB22C4FD2CF84F7400210D9F /* Tabs */,
 				DB837019266E1732005CE2A1 /* Assets.xcassets */,
 				DB837016266E1730005CE2A1 /* Main.storyboard */,
 				DB83701B266E1732005CE2A1 /* LaunchScreen.storyboard */,
@@ -223,9 +251,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB585016269D6312006CB091 /* TwitterStatusViewController.swift in Sources */,
+				DB22C4FF2CF84F7F00210D9F /* SwiftUIViewController.swift in Sources */,
+				DB22C5012CF84FA800210D9F /* ContentView.swift in Sources */,
+				DB22C5032CF8510300210D9F /* TextViewRepresentable.swift in Sources */,
 				DB83702B266E1E8F005CE2A1 /* TabBarController.swift in Sources */,
 				DB71CF1726B3DD9A0018F605 /* TextAreaViewController.swift in Sources */,
 				DBA4605E268630B0004E094B /* MastodonStatusViewController.swift in Sources */,
+				DB22C5062CF85C9100210D9F /* InlineIconMetaProvider.swift in Sources */,
 				DB837011266E1730005CE2A1 /* AppDelegate.swift in Sources */,
 				DB837013266E1730005CE2A1 /* SceneDelegate.swift in Sources */,
 			);
