@@ -33,7 +33,6 @@ extension Meta {
 }
 
 extension Meta {
-
     public static func trim(content: String, orderedEntities: [Meta.Entity]) -> String {
         var content = content
         for entity in orderedEntities {
@@ -50,7 +49,10 @@ extension Meta {
         case .emoji:
             trimmed = " "
         default:
-            return
+            guard let userInfo = entity.userInfo, let _trimmed = userInfo["_trimmed"] as? String else {
+                return
+            }
+            trimmed = _trimmed
         }
 
         guard let index = entities.firstIndex(where: { $0.range == entity.range }) else { return }
@@ -66,7 +68,6 @@ extension Meta {
             moveEntity.range.location += offset
         }
     }
-    
 }
 
 extension Meta {
