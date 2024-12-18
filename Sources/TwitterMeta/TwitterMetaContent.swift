@@ -25,6 +25,16 @@ extension TwitterMetaContent: MetaContent {
             let imageView = SDAnimatedImageView()
             let attachment = AnimatedImageMetaAttachment(string: text, url: url, content: imageView)
             return attachment
+        case .media(let text, let url, let userInfo):
+            let imageView = SDAnimatedImageView()
+            let inlineMedia = userInfo?["inlineMedia"] as? TwitterContent.InlineMedia
+            let attachment = MediaMetaAttachment(
+                string: text,
+                url: url,
+                size: inlineMedia?.size ?? .zero,
+                content: imageView
+            )
+            return attachment
         default:
             return nil
         }

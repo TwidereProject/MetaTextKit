@@ -12,12 +12,30 @@ import TwitterMeta
 struct ContentView: View {
 
     @State var textEditorContent = "Hello, World!"
+
     let metaContent: MetaContent
 
     init() {
+        let content = """
+        Hello, World! @username #hashtag awesome smile_face hi apple_inc apple_inc. Hello, World! @username #hashtag awesome smile_face hi apple_inc apple_inc. Hello, World! @username #hashtag awesome smile_face hi apple_inc apple_inc
+        The paragraph 2 is from this line. The paragraph 2 is from this line. The paragraph 2 is from this line. The paragraph 2 is from this line. The paragraph 2 is from this line. The paragraph 2 is from this line.
+        The paragraph 3 is from this line. The paragraph 3 is from this line. The paragraph 3 is from this line. The paragraph 3 is from this line. The paragraph 3 is from this line. The paragraph 3 is from this line.
+        """
         let text = TwitterContent(
-            content: "Hello, World! @username #hashtag awesome smile_face hi apple_inc apple_inc",
-            urlEntities: []
+            content: content,
+            urlEntities: [],
+            inlineMedia: {
+                var media: [TwitterContent.InlineMedia] = []
+                media.append(TwitterContent.InlineMedia(
+                    index: 100,
+                    mediaID: "001",
+                    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/1280px-The_Earth_seen_from_Apollo_17.jpg",
+                    previewURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/1280px-The_Earth_seen_from_Apollo_17.jpg",
+                    size: CGSize(width: 1280, height: 1281),
+                    mediaType: .photo
+                ))
+                return media
+            }()
         )
         let dict: [String: URL] = [
             "apple_inc": "https://media.mstdn.jp/custom_emojis/images/000/002/171/original/b848520ba07a354c.png",

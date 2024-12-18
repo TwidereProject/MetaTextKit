@@ -15,6 +15,7 @@ public enum Meta {
     case email(_ text: String, userInfo: [AnyHashable: Any]? = nil)
     case emoji(_ text: String, shortcode: String, url: String, userInfo: [AnyHashable: Any]? = nil)
     case icon(_ text: String, url: String, userInfo: [AnyHashable: Any]? = nil)
+    case media(_ text: String, url: String, userInfo: [AnyHashable: Any]? = nil)
     case style(_ text: String, styles: [Meta.StyleType], userInfo: [AnyHashable: Any]? = nil)
 }
 
@@ -138,6 +139,8 @@ extension Meta: CustomDebugStringConvertible {
         case .emoji(let text, _, _, _):
             return text
         case .icon(let text, _, _):
+            return text
+        case .media(let text, _, _):
             return text
         case .style(let text, _, _):
             return text

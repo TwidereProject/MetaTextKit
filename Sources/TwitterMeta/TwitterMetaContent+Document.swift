@@ -36,6 +36,24 @@ extension TwitterMetaContent {
             return orderedEntities
         }()
         entities.append(contentsOf: richTextEntities)
+
+        // inline media
+        let inlineMediaEntities: [Meta.Entity] = {
+            let nsContent = content.content as NSString
+            let nsContentRange = NSRange(location: 0, length: nsContent.length)
+            let entities = content.inlineMedia.compactMap { item -> Meta.Entity? in
+                guard let range = item.range.intersection(nsContentRange), range.location != NSNotFound else { return nil }
+                let text = nsContent.substring(with: range)
+                return Meta.Entity(
+                    range: range,
+                    meta: .media(text, url: item.url, userInfo: ["inlineMedia": item])
+                )
+            }
+            let orderedEntities = entities.sorted(by: { $0.range.location < $1.range.location })
+            return orderedEntities
+        }()
+        entities.append(contentsOf: inlineMediaEntities)
+
         let original: String = {
             if useParagraphMark {
                 return Meta.replaceParagraphMark(content: content.content, orderedEntities: richTextEntities)

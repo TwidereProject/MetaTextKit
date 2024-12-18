@@ -11,11 +11,13 @@ public struct TwitterContent {
     public let content: String
     public let urlEntities: [URLEntity]
     public let richTextTags: [RichTextTag]
+    public let inlineMedia: [InlineMedia]
 
     public init(
         content: String,
         urlEntities: [URLEntity],
-        richTextTags: [RichTextTag] = []
+        richTextTags: [RichTextTag] = [],
+        inlineMedia: [InlineMedia] = []
     ) {
         self.content = content
             .replacingOccurrences(of: "&amp;", with: "&")
@@ -25,6 +27,7 @@ public struct TwitterContent {
             .replacingOccurrences(of: "&apos;", with: "'")
         self.urlEntities = urlEntities
         self.richTextTags = richTextTags
+        self.inlineMedia = inlineMedia
     }
 }
 
@@ -56,6 +59,41 @@ extension TwitterContent {
         public init(range: NSRange, types: [RichTextType]) {
             self.range = range
             self.types = types
+        }
+    }
+
+    public struct InlineMedia: Codable {
+        public let index: Int
+        public let mediaID: String
+        public let url: String
+        public let previewURL: String
+        public let size: CGSize
+        public let mediaType: MediaType
+
+        public var range: NSRange {
+            NSRange(location: index, length: 0)
+        }
+
+        public init(
+            index: Int,
+            mediaID: String,
+            url: String,
+            previewURL: String,
+            size: CGSize,
+            mediaType: MediaType
+        ) {
+            self.index = index
+            self.mediaID = mediaID
+            self.url = url
+            self.previewURL = previewURL
+            self.size = size
+            self.mediaType = mediaType
+        }
+
+        public enum MediaType: Codable, Hashable {
+            case audio
+            case photo
+            case video
         }
     }
 }

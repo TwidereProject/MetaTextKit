@@ -29,7 +29,7 @@ extension MetaTextAreaView {
             switch entity.meta {
             case .url, .hashtag, .cashtag, .mention, .email:
                 return AccessibilityElement(accessibilityContainer: self, entity: entity)
-            case .emoji, .icon, .style:
+            case .emoji, .icon, .media, .style:
                 return nil
             }
         }

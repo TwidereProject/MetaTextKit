@@ -29,6 +29,7 @@ extension Meta.Entity {
         case .mention(let text, _, _):          return text
         case .email(let text, _):               return text
         case .icon(let text, _, _):             return text
+        case .media(let text, _, _):            return text
         case .style(let text, _, _):            return text
         }
     }
@@ -42,6 +43,7 @@ extension Meta.Entity {
         case .mention(let text, _, _):          return text
         case .email(let text, _):               return text
         case .icon(let text, _, _):             return text
+        case .media(let text, _, _):            return text
         case .style(let text, _, _):            return text
         }
     }
@@ -67,6 +69,7 @@ extension Meta.Entity {
         case .mention: return "mention"
         case .email: return "email"
         case .icon: return "icon"
+        case .media: return "media"
         case .style: return "style"
         }
     }
@@ -80,6 +83,7 @@ extension Meta.Entity {
         case .mention(_, _, let userInfo):          return userInfo
         case .email(_, let userInfo):               return userInfo
         case .icon(_, _, let userInfo):             return userInfo
+        case .media(_, _, let userInfo):            return userInfo
         case .style(_, _, let userInfo):            return userInfo
         }
     }
