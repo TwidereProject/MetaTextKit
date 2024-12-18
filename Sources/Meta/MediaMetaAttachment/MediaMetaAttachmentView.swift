@@ -39,6 +39,9 @@ public class MediaMetaAttachmentView: UIView {
             guard let self = self else { return }
             // do nothing
         }
+
+        layer.cornerRadius = 12
+        layer.masksToBounds = true
     }
 
     required init?(coder: NSCoder) {
