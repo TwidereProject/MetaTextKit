@@ -23,7 +23,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/DimensionDev/Fuzi.git", from: "3.2.0"),
         .package(url: "https://github.com/SDWebImage/SDWebImage.git", from: "5.20.0"),
-        .package(url: "https://github.com/TwidereProject/twitter-text.git", exact: "0.0.4"),
+        .package(url: "https://github.com/TwidereProject/twitter-text.git", exact: "0.0.6"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
