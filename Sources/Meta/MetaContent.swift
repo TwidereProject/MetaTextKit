@@ -58,7 +58,7 @@ extension MetaContent {
         // filter out temp font attribute run
         // and update the text style
         for run in attributedString.runs {
-            guard let font = run.attributes.font else { continue }
+            guard let font = run.attributes.uiKit.font else { continue }
             let fontDescriptor = font.fontDescriptor
             let inlinePresentationIntent: InlinePresentationIntent = {
                 var inlinePresentationIntent: InlinePresentationIntent = []

@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TwidereProject/twitter-text.git",
       "state" : {
-        "revision" : "aaa067a823a61f27780692a836ec78fd0c0706fc",
-        "version" : "0.0.4"
+        "revision" : "0dc67df0d8b8b5a4c7d1d33dc9ff26ab0f20ec98",
+        "version" : "0.0.6"
       }
     },
     {
