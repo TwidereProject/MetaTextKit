@@ -71,7 +71,8 @@ extension MetaContent {
                 return inlinePresentationIntent
             }()
             attributedString[run.range].inlinePresentationIntent = inlinePresentationIntent
-            attributedString[run.range].font = nil
+            attributedString[run.range].uiKit.font = nil
+            attributedString[run.range].swiftUI.font = nil
             // print(run)
         }
         
