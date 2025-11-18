@@ -29,18 +29,18 @@ public class MetaTextView: UITextView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override var isEditable: Bool {
-        didSet {
-            tapGestureRecognizer.isEnabled = !isEditable
-        }
-    }
+//    public override var isEditable: Bool {
+//        didSet {
+//            tapGestureRecognizer.isEnabled = !isEditable
+//        }
+//    }
 
     private func _init() {
         addGestureRecognizer(tapGestureRecognizer)
 
         tapGestureRecognizer.addTarget(self, action: #selector(MetaTextView.tapGestureRecognizerHandler(_:)))
         tapGestureRecognizer.delaysTouchesBegan = false
-        tapGestureRecognizer.isEnabled = !isEditable
+        tapGestureRecognizer.isEnabled = true // !isEditable
     }
 
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -59,14 +59,39 @@ public class MetaTextView: UITextView {
         let glyphIndex: Int? = layoutManager.glyphIndex(for: point, in: textContainer, fractionOfDistanceThroughGlyph: nil)
         let index: Int? = layoutManager.characterIndexForGlyph(at: glyphIndex ?? 0)
 
-        if let characterIndex = index,
-           characterIndex < textStorage.length,
-           let meta = textStorage.attribute(.meta, at: characterIndex, effectiveRange: nil) as? Meta
-        {
-            return meta
-        } else {
+        guard let characterIndex = index,
+           characterIndex < textStorage.length
+        else {
             return nil
         }
+
+        if let meta = textStorage.attribute(.meta, at: characterIndex, effectiveRange: nil) as? Meta {
+            return meta
+        } else {
+            var attachments: [MetaTextViewTextAttachment] = []
+            textStorage.enumerateAttributes(
+                in: NSRange(location: 0, length: textStorage.length),
+                options: NSAttributedString.EnumerationOptions(rawValue: 0)
+            ) { (object, range, stop) in
+                if let attachment = object[.attachment] as? MetaTextViewTextAttachment,
+                   let _ = attachment.image
+                {
+                    attachments.append(attachment)
+                }
+            }
+
+            var fixPoint = point
+            fixPoint.x -= self.textContainerInset.left
+            fixPoint.y -= self.textContainerInset.top
+
+            for attachment in attachments {
+                if attachment.bounds.contains(fixPoint) {
+                    return Meta.mention("", mention: "", userInfo: attachment.userInfo)
+                }
+            }
+        }
+
+        return nil
     }
 
 }
@@ -89,4 +114,8 @@ extension MetaTextView {
             break
         }
     }
+}
+
+public class MetaTextViewTextAttachment: NSTextAttachment {
+    public var userInfo: [String: Any]?
 }
