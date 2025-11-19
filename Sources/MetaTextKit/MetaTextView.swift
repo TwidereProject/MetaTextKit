@@ -69,6 +69,7 @@ public class MetaTextView: UITextView {
             return meta
         } else {
             var attachments: [MetaTextViewTextAttachment] = []
+            var ranges: [NSRange] = []
             textStorage.enumerateAttributes(
                 in: NSRange(location: 0, length: textStorage.length),
                 options: NSAttributedString.EnumerationOptions(rawValue: 0)
@@ -77,6 +78,7 @@ public class MetaTextView: UITextView {
                    let _ = attachment.image
                 {
                     attachments.append(attachment)
+                    ranges.append(range)
                 }
             }
 
@@ -84,8 +86,9 @@ public class MetaTextView: UITextView {
             fixPoint.x -= self.textContainerInset.left
             fixPoint.y -= self.textContainerInset.top
 
-            for attachment in attachments {
-                if attachment.bounds.contains(fixPoint) {
+            for (attachment, range) in zip(attachments, ranges) {
+                let frameForAttachment = layoutManager.boundingRect(forGlyphRange: range, in: textContainer)
+                if frameForAttachment.contains(fixPoint) {
                     return Meta.mention("", mention: "", userInfo: attachment.userInfo)
                 }
             }
