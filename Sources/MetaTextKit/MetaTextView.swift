@@ -29,18 +29,13 @@ public class MetaTextView: UITextView {
         fatalError("init(coder:) has not been implemented")
     }
 
-//    public override var isEditable: Bool {
-//        didSet {
-//            tapGestureRecognizer.isEnabled = !isEditable
-//        }
-//    }
-
     private func _init() {
-        addGestureRecognizer(tapGestureRecognizer)
-
         tapGestureRecognizer.addTarget(self, action: #selector(MetaTextView.tapGestureRecognizerHandler(_:)))
         tapGestureRecognizer.delaysTouchesBegan = false
+        tapGestureRecognizer.cancelsTouchesInView = false
         tapGestureRecognizer.isEnabled = true // !isEditable
+        tapGestureRecognizer.delegate = self
+        addGestureRecognizer(tapGestureRecognizer)
     }
 
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -105,8 +100,8 @@ extension MetaTextView {
 
         switch sender.state {
         case .ended:
-            // always try cancel selection when tap ended
-            if isSelectable {
+            // always try cancel selection when tap ended (except isEditable)
+            if !isEditable && isSelectable {
                 selectedTextRange = nil
             }
 
@@ -116,6 +111,16 @@ extension MetaTextView {
         default:
             break
         }
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+extension MetaTextView: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        return true
     }
 }
 
